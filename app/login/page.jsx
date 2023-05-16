@@ -1,9 +1,8 @@
-
-import Login from './../../src/component/Login';
+import Login from '../../src/component/Login/Login';
 
 const LoginPage = () => {
     return (
-        <div>
+        <div className='w-full h-screen bg-gray-100'>
             <Login />
         </div>
     )

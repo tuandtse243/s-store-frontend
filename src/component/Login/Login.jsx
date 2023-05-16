@@ -2,33 +2,38 @@
 
 import { React, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import styles from "../styles/styles.js";
-// import { Link, useNavigate } from "react-router-dom";
+import styles from "../../styles/styles.js";
 import Link from "next/link.js";
 import { notification } from 'antd';
 import axios from "axios";
+import { useRouter } from 'next/navigation';
+import useAuth from "@/src/context/auth.js";
 
 const Login = () => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
+
+  const setAuth = useAuth((state) => state.setAuth)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     await axios
       .post(
-        `http://localhost:5000/api/v1/auth/register`,
+        `http://localhost:5000/api/v1/auth/login`,
         {
           email,
           password,
         },
-        { withCredentials: true }
+        // { withCredentials: true }
       )
       .then((res) => {
-        notification.success({message: "Login Success!"})
-        navigate("/");
-        window.location.reload(true); 
+        notification.success({message: res.data.message})
+        setAuth({user: res.data.user, token: res.data.token});
+        localStorage.setItem('auth', JSON.stringify(res.data))
+        router.push('/')
       })
       .catch((err) => {
         notification.error({message: err.response.data.message})

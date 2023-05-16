@@ -1,27 +1,28 @@
 {
-  "root": true,
-  "extends": "next/core-web-vitals",
-  "rules": {
-    "@next/next/no-img-element": "off",
-    "@next/next/no-html-link-for-pages": "off",
-    "import/no-anonymous-default-export": [
-      "error",
-      {
-        "allowArray": false,
-        "allowArrowFunction": true,
-        "allowAnonymousClass": true,
-        "allowAnonymousFunction": false,
-        "allowCallExpression": true, // The true value here is for backward compatibility
-        "allowLiteral": false,
-        "allowObject": false
-      }
-    ],
-    "react-hooks/exhaustive-deps": "off",
-    "eslint.autoFixOnSave": true,
-    "eslint.validate": [
-      "javascript",
-      "javascriptreact"
-    ]
+  // "root": true,
+  // // "extends": "next/core-web-vitals",
+  // "rules": {
+  //   "@next/next/no-img-element": "off",
+  //   "@next/next/no-html-link-for-pages": "off",
+  //   "import/no-anonymous-default-export": [
+  //     "error",
+  //     {
+  //       "allowArray": false,
+  //       "allowArrowFunction": true,
+  //       "allowAnonymousClass": true,
+  //       "allowAnonymousFunction": false,
+  //       "allowCallExpression": true, // The true value here is for backward compatibility
+  //       "allowLiteral": false,
+  //       "allowObject": false
+  //     }
+  //   ],
+  //   "react-hooks/exhaustive-deps": "off",
+  //   "eslint.autoFixOnSave": true,
+  //   "eslint.validate": [
+  //     "javascript",
+  //     "javascriptreact"
+  //   ]
     
-  }
+  // },
+  "extends": ["next", "prettier"]
 }
