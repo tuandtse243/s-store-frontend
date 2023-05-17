@@ -1,3 +1,3 @@
-const server = 'http://localhost:5000/api/v2'
+export const server = 'http://localhost:5000/api/v2'
 
-export default server
+export const backend_url = "http://localhost:5000"

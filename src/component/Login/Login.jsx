@@ -7,35 +7,36 @@ import Link from "next/link.js";
 import { notification } from 'antd';
 import axios from "axios";
 import { useRouter } from 'next/navigation';
-import useAuth from "@/src/context/auth.js";
+import { useAuth } from "@/store/auth.js";
+import { server } from "@/server.js";
 
 const Login = () => {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
 
-  const setAuth = useAuth((state) => state.setAuth)
+  // const setAuth = useAuth((state) => state.setAuth)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     await axios
       .post(
-        `http://localhost:5000/api/v1/auth/login`,
+        `${server}/user/login-user`,
         {
-          email,
+          username,
           password,
         },
-        // { withCredentials: true }
+        { withCredentials: true }
       )
       .then((res) => {
-        notification.success({message: res.data.message})
-        setAuth({user: res.data.user, token: res.data.token});
-        localStorage.setItem('auth', JSON.stringify(res.data))
+        notification.success({message: "Login successfully!"})
         router.push('/')
       })
       .catch((err) => {
+        // notification.error({message: "Login fail!"})
+        // console.log(err.response.data)
         notification.error({message: err.response.data.message})
       });
   };
@@ -55,16 +56,16 @@ const Login = () => {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email address
+                Username
               </label>
               <div className="mt-1">
                 <input
-                  type="email"
-                  name="email"
-                  autoComplete="email"
+                  type="username"
+                  name="username"
+                  autoComplete="username"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>

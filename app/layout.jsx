@@ -1,4 +1,7 @@
+"use client"
+
 import '../styles/globals.scss'
+
 
 export const metadata = {
   title: 'Create Next App',
@@ -6,6 +9,8 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+  
+
   return (
     <html lang="en">
       <body>
