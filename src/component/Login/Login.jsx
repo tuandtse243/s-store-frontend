@@ -7,11 +7,15 @@ import Link from "next/link.js";
 import { notification } from 'antd';
 import axios from "axios";
 import { useRouter } from 'next/navigation';
-import { useAuth } from "@/store/auth.js";
+import { useAuth, useIsAuthenticated } from "@/store/auth.js";
 import { server } from "@/server.js";
 
 const Login = () => {
   const router = useRouter();
+
+  const setAuth = useAuth((state) => state.setAuth);
+  const setIsAuthenticated = useIsAuthenticated((state) => state.setIsAuthenticated)
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
@@ -30,9 +34,13 @@ const Login = () => {
         },
         { withCredentials: true }
       )
-      .then((res) => {
-        notification.success({message: "Login successfully!"})
-        router.push('/')
+      .then(async (res) => {
+        // window.location.reload(true);
+        // router.refresh();
+        notification.success({message: "Login successfully!"});
+        setAuth(res.data.user);
+        setIsAuthenticated(true);
+        router.push('/');
       })
       .catch((err) => {
         // notification.error({message: "Login fail!"})

@@ -6,7 +6,7 @@ import { notification } from 'antd';
 import axios from "axios";
 import { useRouter } from 'next/navigation';
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import server from '../../../server.js'
+import {server} from '../../../server.js'
 
 const Register = () => {
     const router = useRouter();

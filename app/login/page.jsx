@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import Login from '../../src/component/Login/Login';
 import { useAuth, useIsAuthenticated } from '@/store/auth';
 import { useRouter } from 'next/navigation';
+import { notification } from 'antd';
 
 const LoginPage = () => {
     const isAuthenticated = useIsAuthenticated((state) => state.isAuthenticated);
@@ -10,6 +11,7 @@ const LoginPage = () => {
     const router = useRouter();
     useEffect(() => {
         if(isAuthenticated) {
+            notification.error({message: 'You have already logged!'})
             router.push('/')
         }
     }, [])
