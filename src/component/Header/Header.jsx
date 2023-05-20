@@ -20,15 +20,13 @@ import { useIsAuthenticated, useAuth } from '@/store/auth';
 import { backend_url } from '@/server';
 import Cart from '../Cart/Cart';
 import Wishlist from '../Wishlist/Wishlist';
-
-
+import { useCart } from '@/store/cart';
 
 
 const Header = ({ activeHeading }) => {
     const isAuthenticated = useIsAuthenticated((state) => state.isAuthenticated);
     const auth = useAuth((state) => state.auth);
-    // console.log(isAuthenticated)
-    // console.log(auth)
+    const cart = useCart((state) => state.cart);
 
     const [searchTerm, setSearchTerm] = useState("");
     const [searchData, setSearchData] = useState(null);
@@ -179,8 +177,7 @@ const Header = ({ activeHeading }) => {
                   color="rgb(255 255 255 / 83%)"
                 />
                 <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                  {/* {cart && cart.length} */}
-                  10
+                  {cart && cart.length}
                 </span>
               </div>
             </div>

@@ -9,9 +9,8 @@ import {
   AiOutlineStar,
 } from "react-icons/ai";
 
-// import { backend_url } from "../../../server";
+import { backend_url } from "@/server"; 
 import styles from "@/src/styles/styles";
-// import { useDispatch, useSelector } from "react-redux";
 // import ProductDetailsCard from "../ProductDetailsCard/ProductDetailsCard";
 // import {
 //   addToWishlist,
@@ -22,13 +21,15 @@ import styles from "@/src/styles/styles";
 import Link from "next/link";
 import { notification } from "antd";
 import ProductDetailsCard from "../ProductDetailsCard/ProductDetailsCard";
+import { useCart } from "@/store/cart";
 
-const ProductCard = ({ data, isEvent }) => {
+const ProductCard = ({ data }) => {
 //   const { wishlist } = useSelector((state) => state.wishlist);
 //   const { cart } = useSelector((state) => state.cart);
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
-//   const dispatch = useDispatch();
+  const cart = useCart((state) => state.cart);
+  const setCart = useCart((state) => state.setCart);
 
 //   useEffect(() => {
 //     if (wishlist && wishlist.find((i) => i._id === data._id)) {
@@ -51,19 +52,19 @@ const ProductCard = ({ data, isEvent }) => {
     dispatch(addToWishlist(data));
   };
 
-  const addToCartHandler = (id) => {
-    // const isItemExists = cart && cart.find((i) => i._id === id);
-    // if (isItemExists) {
-    //   notification.error("Item already in cart!");
-    // } else {
-    //   if (data.stock < 1) {
-    //     notification.error("Product stock limited!");
-    //   } else {
-    //     const cartData = { ...data, qty: 1 };
-    //     dispatch(addTocart(cartData));
-    //     notification.success("Item added to cart successfully!");
-    //   }
-    // }
+  const addToCartHandler = (data) => {
+    const isItemExists = cart && cart.find((i) => i.id === data.id);
+    if (isItemExists) {
+      notification.error({message: "Item already in cart!"});
+    } else {
+      if (data.stock < 1) {
+        notification.error({message: "Product stock limited!"});
+      } else {
+        const cartData = { ...data, qty: 1 };
+        setCart([...cart, cartData]);
+        notification.success({message: "Item added to cart successfully!"});
+      }
+    }
   };
 
   return (
@@ -143,7 +144,8 @@ const ProductCard = ({ data, isEvent }) => {
                 </span>
             </div>
         </Link>
-        {/* side options */}
+
+        {/* side options
         <div>
             {click ? (
                 <AiFillHeart
@@ -177,10 +179,10 @@ const ProductCard = ({ data, isEvent }) => {
                 title="Add to cart"
             />
             {open ? <ProductDetailsCard setOpen={setOpen} data={data} /> : null}
-        </div>
+        </div> */}
 
         {/* side options */}
-        {/* <div>
+        <div>
           {click ? (
             <AiFillHeart
               size={22}
@@ -208,12 +210,12 @@ const ProductCard = ({ data, isEvent }) => {
           <AiOutlineShoppingCart
             size={25}
             className="cursor-pointer absolute right-2 top-24"
-            onClick={() => addToCartHandler(data._id)}
+            onClick={() => addToCartHandler(data)}
             color="#444"
             title="Add to cart"
           />
           {open ? <ProductDetailsCard setOpen={setOpen} data={data} /> : null}
-        </div> */}
+        </div>
       </div>
     </>
   );

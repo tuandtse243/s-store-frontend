@@ -7,23 +7,16 @@ import styles from "@/src/styles/styles";
 
 import { backend_url } from "@/server";
 import Link from "next/link";
+import { useCart } from "@/store/cart";
+import { notification } from "antd";
 
 const Cart = ({ setOpenCart }) => {
-//   const { cart } = useSelector((state) => state.cart);
-//   const dispatch = useDispatch();
+  const cart = useCart((state) => state.cart);
 
-  const removeFromCartHandler = (data) => {
-    // dispatch(removeFromCart(data));
-  };
-
-//   const totalPrice = cart.reduce(
-//     (acc, item) => acc + item.qty * item.discountPrice,
-//     0
-//   );
-
-  const quantityChangeHandler = (data) => {
-    // dispatch(addTocart(data));
-  };
+  const totalPrice = cart.reduce(
+    (acc, item) => acc + item.qty * item.price,
+    0
+  );
 
   const cartData = [
     {
@@ -55,8 +48,7 @@ const Cart = ({ setOpenCart }) => {
   return (
     <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
       <div className="fixed top-0 right-0 h-full w-[80%] 800px:w-[30%] bg-white flex flex-col overflow-y-scroll justify-between shadow-sm">
-        {/* {cart && cart.length === 0 ? ( */}
-        { false ? (
+        { cart && cart.length === 0 ? (
           <div className="w-full h-screen flex items-center justify-center">
             <div className="flex w-full justify-end pt-5 pr-5 fixed top-3 right-3">
                <RxCross1 
@@ -80,27 +72,16 @@ const Cart = ({ setOpenCart }) => {
               {/* Item length */}
               <div className={`${styles.noramlFlex} p-4`}>
                 <IoBagHandleOutline size={25} />
-                <h5 className="pl-2 text-[20px] font-[500]">10 items</h5>
-                {/* <h5 className="pl-2 text-[20px] font-[500]">{cart && cart.length} items</h5> */}
+                <h5 className="pl-2 text-[20px] font-[500]">{cart && cart.length} items</h5>
               </div>
 
               {/* cart Single Items */}
               <br />
               <div className="w-full border-t">
-                {/* {cart && cart.map((i, index) => (
+                {cart && cart.map((i, index) => (
                     <CartSingle
                       key={index}
                       data={i}
-                      quantityChangeHandler={quantityChangeHandler}
-                      removeFromCartHandler={removeFromCartHandler}
-                    />
-                ))} */}
-                {cartData && cartData.map((i, index) => (
-                    <CartSingle
-                      key={index}
-                      data={i}
-                      quantityChangeHandler={quantityChangeHandler}
-                      removeFromCartHandler={removeFromCartHandler}
                     />
                 ))}
               </div>
@@ -113,8 +94,7 @@ const Cart = ({ setOpenCart }) => {
                   className={`h-[45px] flex items-center justify-center w-[100%] bg-[#e44343] rounded-[5px]`}
                 >
                   <h1 className="text-[#fff] text-[18px] font-[600]">
-                    {/* Checkout Now (USD${totalPrice}) */}
-                    Checkout Now (USD$)
+                    Checkout Now (USD${totalPrice})
                   </h1>
                 </div>
               </Link>
@@ -126,26 +106,46 @@ const Cart = ({ setOpenCart }) => {
   );
 };
 
-const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
-  const [value, setValue] = useState(data.qty);
+const CartSingle = ({ data }) => {
+  const setCart = useCart((state) => state.setCart);
+  const cart = useCart((state) => state.cart);
+
 //   const totalPrice = data.discountPrice * value;
-  const totalPrice = data.price * 6;
+  const totalPrice = data.price * data.qty;
 
   const increment = (data) => {
-    if (data.stock < value) {
-      toast.error("Product stock limited!");
+    if (data.stock < data.qty) {
+      notification.error({message: `Số lượng hàng trong kho là ${data.stock}`});
     } else {
-      setValue(value + 1);
-      const updateCartData = { ...data, qty: value + 1 };
-      quantityChangeHandler(updateCartData);
+      const newCart = cart.map((item) => {
+        if(item.name === data.name) {
+          item.qty = data.qty + 1;
+          return item;
+        } else {
+          return item;
+        }
+      })
+      setCart(newCart)
     }
   };
 
   const decrement = (data) => {
-    setValue(value === 1 ? 1 : value - 1);
-    const updateCartData = { ...data, qty: value === 1 ? 1 : value - 1 };
-    quantityChangeHandler(updateCartData);
+    const newCart = cart.map((item) => {
+      if(item.name === data.name) {
+        item.qty = data.qty === 1 ? 1 : data.qty - 1;
+        return item;
+      } else {
+        return item;
+      }
+    })
+    setCart(newCart)
   };
+
+  const removeFromCartHandler = (data) => {
+    const newCart = cart.filter((item) => item.name !== data.name);
+    console.log(newCart)
+    setCart(newCart)
+  }
 
   return (
     <div className="border-b p-4">
@@ -165,7 +165,7 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
             US${totalPrice}
           </h4> */}
           <h4 className="font-[400] text-[15px] text-[#00000082]">
-            ${data.price} * 6
+            ${data.price} * {data.qty}
           </h4>
           <div className="flex">
             <h4 className="font-[600] text-[17px] pt-[3px] text-[#d02222] font-Roboto">
@@ -178,8 +178,7 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
                 >
                     <HiOutlineMinus size={16} color="#7d879c" />
                 </div>
-                <span className="px-[10px]">10</span>
-                {/* <span className="pl-[10px]">{data.qty}</span> */}
+                <span className="px-[10px]">{data.qty}</span>
                 <div
                 className={`bg-[#e44343] border border-[#e4434373] rounded-full w-[25px] h-[25px] ${styles.noramlFlex} justify-center cursor-pointer`}
                 onClick={() => increment(data)}
