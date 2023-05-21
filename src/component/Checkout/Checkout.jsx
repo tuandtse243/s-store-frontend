@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "@/src/styles/styles";
 import { Country, State } from "country-state-city";
 import axios from "axios";
@@ -8,6 +8,9 @@ import { notification } from "antd";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/store/auth";
 import { useCart } from "@/store/cart";
+import Province from '../../../public/address/tinh_tp.json';
+import District from '../../../public/address/quan_huyen.json';
+import Town from '../../../public/address/xa_phuong.json'
 
 const Checkout = () => {
   const router = useRouter();
@@ -34,6 +37,7 @@ const Checkout = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    
   }, []);
 
   const paymentSubmit = () => {
@@ -44,8 +48,8 @@ const Checkout = () => {
             name,
             phone,
             email,
-            province,
-            district,
+            province: province.split(',')[1],
+            district: district.split(',')[1],
             town,
             street,
             houseNumber,
@@ -60,12 +64,12 @@ const Checkout = () => {
         subTotalPrice,
         shipping,
         discountPrice,
-        }
+        };
 
         console.log(orderData)
 
     // update local storage with the updated orders array
-    // localStorage.setItem("latestOrder", JSON.stringify(orderData));
+    localStorage.setItem("latestOrder", JSON.stringify(orderData));
     router.push("/payment");
    }
   };
@@ -191,6 +195,10 @@ const ShippingInfo = ({
   typeAddress,
   setTypeAddress
 }) => {
+  const Provinces = Object.values(Province);
+  const Districts = Object.values(District);
+  // const provinceCode = useRef("");
+  // console.log(provinceCode)
   return (
     <div className="w-full 800px:w-[95%] bg-white rounded-md p-5 pb-8">
       <h5 className="text-[18px] font-[500]">Thông tin giao hàng</h5>
@@ -238,14 +246,17 @@ const ShippingInfo = ({
             <select
               className="w-[95%] border h-[40px] rounded-[5px]"
               value={province}
-              onChange={(e) => setProvince(e.target.value)}
+              onChange={(e) => {
+                console.log(e.target.value.split(',')[0])
+                setProvince(e.target.value)
+                }}
             >
-              <option className="block pb-2" value="">
+              <option className="block pb-2">
                 Chọn tỉnh/thành phố
               </option>
-              {Country &&
-                Country.getAllCountries().map((item) => (
-                  <option key={item.isoCode} value={item.isoCode}>
+              {Provinces &&
+                Provinces.map((item) => (
+                  <option key={item.code} value={[item.code, item.name]}>
                     {item.name}
                   </option>
                 ))}
@@ -261,9 +272,9 @@ const ShippingInfo = ({
               <option className="block pb-2" value="">
                 Chọn quận/huyện
               </option>
-              {State &&
-                State.getStatesOfCountry(province).map((item) => (
-                  <option key={item.isoCode} value={item.isoCode}>
+              {Districts &&
+                Districts.filter((item) => item.parent_code === province.split(',')[0]).map((item) => (
+                  <option key={item.code} value={[item.code, item.name]}>
                     {item.name}
                   </option>
                 ))}
@@ -282,15 +293,11 @@ const ShippingInfo = ({
               <option className="block pb-2" key='abc' value="abc">
                 Chọn phường/xã
               </option>
-              <option key='HCM' value="HCM">
-                Hồ Chí Minh
-              </option>
-              {/* {Country &&
-                Country.getAllCountries().map((item) => (
-                  <option key={item.isoCode} value={item.isoCode}>
+              {Object.values(Town).filter((item) => item.parent_code === district.split(',')[0]).map((item) => (
+                  <option key={item.code} value={item.name}>
                     {item.name}
                   </option>
-                ))} */}
+                ))}
             </select>
           </div>
           <div className="w-[50%]">
@@ -298,9 +305,12 @@ const ShippingInfo = ({
             <select
               className="w-[95%] border h-[40px] rounded-[5px]"
               value={typeAddress}
-              onChange={(e) => setTypeAddress(e.target.value)}
+              onChange={(e) => {
+                console.log(e.target.value)
+                setTypeAddress(e.target.value)
+                }}
             >
-              <option className="block pb-2" value="">
+              <option className="block pb-2">
                 Chọn loại địa chỉ
               </option>
                 <option key='home' value='home'>
