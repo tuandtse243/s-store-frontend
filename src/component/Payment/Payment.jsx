@@ -39,31 +39,6 @@ const Payment = () => {
     totalPrice: orderData?.totalPrice,
   };
 
-  const momoPaymentHandler = async (paymentInfo) => {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    order.paymentInfo = {
-      id: paymentInfo.payer_id,
-      status: "succeeded",
-      type: "Momo",
-    };
-
-    await axios
-      .post(`${server}/order/create-order`, order, config)
-      .then((res) => {
-        setOpen(false);
-        navigate("/order/success");
-        notification.success({message: "Order successful!"});
-        localStorage.setItem("cartItems", JSON.stringify([]));
-        localStorage.setItem("latestOrder", JSON.stringify([]));
-        window.location.reload();
-      });
-  };
-
   const cashOnDeliveryHandler = async (e) => {
     e.preventDefault();
 
@@ -74,6 +49,7 @@ const Payment = () => {
     };
 
     order.paymentInfo = {
+      status: 'WAITING',
       type: "Cash On Delivery",
     };
 
@@ -98,8 +74,15 @@ const Payment = () => {
       },
     };
 
+    order.paymentInfo = {
+      status: 'WAITING',
+      type: "Momo",
+    };
+
     const res = await axios.post(`${server}/momo/create-payment`, order, config);
     const payUrl = res.data?.payUrl?.paymentUrl;
+    localStorage.setItem("latestOrder", JSON.stringify(res.data?.order));
+    // console.log(payUrl)
 
     router.push(payUrl);
   }
