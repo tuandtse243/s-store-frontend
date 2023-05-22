@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AiOutlineArrowRight,
   AiOutlineCamera,
@@ -6,25 +6,20 @@ import {
 } from "react-icons/ai";
 import { backend_url, server } from "@/server";
 import styles from "@/src/styles/styles";
-// import { DataGrid } from "@material-ui/data-grid";
-// import { Button } from "@material-ui/core";
 import Link from "next/link";
 import { MdTrackChanges } from "react-icons/md";
 import { RxCross1 } from "react-icons/rx";
-// import {
-//   deleteUserAddress,
-//   loadUser,
-//   updatUserAddress,
-//   updateUserInformation,
-// } from "../../redux/actions/user";
 import { Country, State } from "country-state-city";
-import { useEffect } from "react";
 import axios from "axios";
-import { notification } from "antd";
+import { Button, Form, Input, Modal, Row, Select, Table, Tag, notification } from "antd";
 import { useAuth } from "@/store/auth";
+import Loader from "../Loader/Loader";
+import { useRouter } from "next/navigation";
+import Province from '../../../public/address/tinh_tp.json';
+import District from '../../../public/address/quan_huyen.json';
+import Town from '../../../public/address/xa_phuong.json';
 
 const ProfileContent = ({ active }) => {
-//   const { user, error, successMessage } = useSelector((state) => state.user);
   const user = useAuth((state) => state.auth);
   const [name, setName] = useState(user && user.name);
   const [email, setEmail] = useState(user && user.email);
@@ -32,20 +27,10 @@ const ProfileContent = ({ active }) => {
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(null);
 
-//   useEffect(() => {
-//     if (error) {
-//       notification.error({message: error});
-//       dispatch({ type: "clearErrors" });
-//     }
-//     if (successMessage) {
-//       notification.success({message: successMessage});
-//       dispatch({ type: "clearMessages" });
-//     }
-//   }, [error, successMessage]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateUserInformation(name, email, phoneNumber, password));
+    // dispatch(updateUserInformation(name, email, phoneNumber, password));
   };
 
   const handleImage = async (e) => {
@@ -159,11 +144,11 @@ const ProfileContent = ({ active }) => {
       )}
 
       {/* order */}
-      {/* {active === 2 && (
+      {active === 2 && (
         <div>
           <AllOrders />
         </div>
-      )} */}
+      )}
 
       {/* Refund */}
       {/* {active === 3 && (
@@ -197,85 +182,231 @@ const ProfileContent = ({ active }) => {
 };
 
 const AllOrders = () => {
+    const router = useRouter();
     const user = useAuth((state) => state.auth);
-//   const { orders } = useSelector((state) => state.order);
+    const [orders, setOrders] = useState([])
 
   useEffect(() => {
-    dispatch(getAllOrdersOfUser(user._id));
+    axios.get(`${server}/order/get-all-orders/${user._id}`)
+    .then((res) => setOrders(res.data?.orders))
   }, []);
 
+  // Thanh toán
+  const onPayment = (order) => {
+    localStorage.setItem("latestOrder", JSON.stringify(order));
+    router.push('/payment')
+  }
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  // Hủy
+  const onCancel = (order) => {
+    order.status = 'CANCEL';
+    axios.post(`${server}/order/update-order`, order, config)
+      .then((res) => {
+        if(res.data.success) {
+          router.refresh();
+        }
+      })
+      .catch((err) => console.log('Error', err))
+  }
+
+  // Chỉnh sửa
+
+  const [form] = Form.useForm();
+  const [order, setOrder] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = (order) => {
+    setIsModalOpen(true);
+    setOrder(order);
+    form.setFieldsValue({ name: order?.shippingAddress?.name, province: order?.shippingAddress?.province, district: order?.shippingAddress?.district, town: order?.shippingAddress?.town, street: order?.shippingAddress?.street, houseNumber: order?.shippingAddress?.houseNumber })
+  };
+
+  const onFinish = (values) => {
+    order.shippingAddress.name = values.name;
+    order.shippingAddress.province =  values.province.split(',')[1] || values.province;
+    order.shippingAddress.district =  values.district.split(',')[1] || values.district;
+    order.shippingAddress.town = values.town;
+    order.shippingAddress.street = values.street;
+    order.shippingAddress.houseNumber = values.houseNumber;
+
+    axios.post(`${server}/order/update-order`, order, config)
+        .then((res) => {
+            if(res.data.success) {
+                notification.success({message: 'Chỉnh sửa đơn hàng thành công'});
+                setIsModalOpen(false);
+                router.refresh();
+            }
+        })
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  //Select address
+  const province = Object.values(Province).map((item) => {
+    return {
+        label: item.name,
+        value: `${item.code},${item.name}`
+    }
+  })
+  const selectedProvince = Form.useWatch('province', form);
+  const district = Object.values(District).filter((item) => item.parent_code === selectedProvince?.split(',')[0]).map((item) => {
+    return {
+        label: item.name,
+        value: `${item.code},${item.name}`
+    }
+  });
+  const selectedDistrict = Form.useWatch('district', form);
+  const town = Object.values(Town).filter((item) => item.parent_code === selectedDistrict?.split(',')[0]).map((item) => {
+    return {
+        label: item.name,
+        value: item.name
+    }
+  });
+
   const columns = [
-    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
-
     {
-      field: "status",
-      headerName: "Status",
-      minWidth: 130,
-      flex: 0.7,
-      cellClassName: (params) => {
-        return params.getValue(params.id, "status") === "Delivered"
-          ? "greenColor"
-          : "redColor";
-      },
+      title: 'Mã đơn',
+      dataIndex: '_id',
+      key: 'id',
+      // render: (text) => <a>{text}</a>,
     },
     {
-      field: "itemsQty",
-      headerName: "Items Qty",
-      type: "number",
-      minWidth: 130,
-      flex: 0.7,
+      title: 'Người nhận',
+      key: 'takePeople',
+      render: (_, { shippingAddress }) => (
+        <>
+          {shippingAddress.name}
+        </>
+      )
     },
-
     {
-      field: "total",
-      headerName: "Total",
-      type: "number",
-      minWidth: 130,
-      flex: 0.8,
+      title: 'Trạng thái',
+      dataIndex: 'status',
+      key: 'status',
+      render: (_, { status }) => (
+        <>
+          {status === 'PROCESSING' ? <Tag color="gold">Đang lấy hàng</Tag> : ''}
+          {status === 'PAYMENT FAIL' ? <Tag color="red">Thanh toán thất bại</Tag> : ''}
+          {status === 'WAITING PAYMENT' ? <Tag color="orange">Chờ thanh toán</Tag> : ''}
+          {status === 'DELIVERING' ? <Tag color="blue">Đang vận chuyển</Tag> : ''}
+          {status === 'INCOMPLETE' ? <Tag color="error">Giao hàng thất bại</Tag> : ''}
+          {status === 'COMPLETE' ? <Tag color="green">Hoàn Thành</Tag> : ''}
+          {status === 'CANCEL' ? <Tag color="cyan">Đã hủy</Tag> : ''}
+        </>
+      )
     },
-
     {
-      field: " ",
-      flex: 1,
-      minWidth: 150,
-      headerName: "",
-      type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link href={`/user/order/${params.id}`}>
-              <Button>
-                <AiOutlineArrowRight size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      },
+      title: 'Tổng tiền',
+      dataIndex: 'totalPrice',
+      key: 'totalPrice',
+    },
+    {
+      title: 'Hình thức',
+      key: 'totalPrice',
+      render: (_, record) => (
+        <>
+          {record?.paymentInfo ? record?.paymentInfo.type : 'Chưa chọn'}
+        </>
+      )
+    },
+    {
+      title: 'Địa chỉ',
+      dataIndex: 'shippingAddress',
+      key: 'shippingAddress',
+      render: (_, { shippingAddress }) => (
+        <>
+          {`${shippingAddress.houseNumber}, ${shippingAddress.street}, ${shippingAddress.town}, ${shippingAddress.district}, ${shippingAddress.province}`}
+        </>
+      )
+    },
+    {
+      title: '',
+      key: 'action',
+      render: (_, record) => (
+        <>
+          <Button type="primary" onClick={() => onDetail(record)}>Chi tiết</Button>
+          {
+            record.status === 'PAYMENT FAIL' || record.status === 'WAITING PAYMENT'  ? <Button type="primary" onClick={() => onPayment(record)}>Thanh toán</Button> : null
+          }
+          {
+            record.status === 'PROCESSING' || record.status === 'PAYMENT FAIL' || record.status === 'WAITING PAYMENT'  ? <Button type="primary" onClick={() => showModal(record)}>Chỉnh sửa</Button> : null
+          }
+          {
+            record.status === 'PROCESSING' || record.status === 'PAYMENT FAIL'  ? <Button type="primary" onClick={() => onCancel(record)}>Hủy đơn</Button> : null
+          }
+        </>
+      ),
     },
   ];
 
-  const row = [];
-
-  orders &&
-    orders.forEach((item) => {
-      row.push({
-        id: item._id,
-        itemsQty: item.cart.length,
-        total: "US$ " + item.totalPrice,
-        status: item.status,
-      });
-    });
-
   return (
-    <div className="pl-8 pt-1">
-      <DataGrid
-        rows={row}
-        columns={columns}
-        pageSize={10}
-        disableSelectionOnClick
-        autoHeight
-      />
+    <div>
+      {orders.length !== 0 ? (
+        <div className="w-full bg-white">
+            <Table columns={columns} dataSource={orders} scroll={{x:800}}/>
+        </div>
+      ) : (
+        <Loader />
+      )}
+
+      <Modal title="Basic Modal" footer={null} open={isModalOpen}>
+        <Form
+            layout='vertical'
+            form={form}
+            onFinish={onFinish}
+        >
+            <Form.Item
+                label="Tên"
+                name="name"
+            >
+                <Input />
+            </Form.Item>
+
+            <Form.Item name="province" label="Chọn tỉnh/thành phố" rules={[{ required: false }]}>
+                <Select
+                    options={province}
+                />
+            </Form.Item>
+
+            <Form.Item name="district" label="Quận/Huyện" rules={[{ required: false }]}>
+                <Select
+                    options={district}
+                />
+            </Form.Item>
+
+            <Form.Item name="town" label="Phường/Xã" rules={[{ required: false }]}>
+                <Select
+                    placeholder=""
+                    options={town}
+                />
+            </Form.Item>
+
+            <Form.Item
+                label="Đường"
+                name="street"
+            >
+                <Input />
+            </Form.Item>
+
+            <Form.Item
+                label="Số nhà"
+                name="houseNumber"
+            >
+                <Input />
+            </Form.Item>
+            <Row justify='space-between' style={{marginTop: '24px'}}>
+                <Button onClick={handleCancel}>Hủy</Button>
+                <Button type='primary' htmlType="submit">Xác nhận</Button>
+            </Row>
+        </Form>
+      </Modal>
     </div>
   );
 };
@@ -288,7 +419,7 @@ const AllRefundOrders = () => {
     dispatch(getAllOrdersOfUser(user._id));
   }, []);
 
-  const eligibleOrders = orders && orders.filter((item) => item.status === "Processing refund");
+  const eligibleOrders = orders && orders.filter((item) => item.record.status === "Processing refund");
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },

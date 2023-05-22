@@ -11,6 +11,7 @@ import { server } from '@/server'
 
 const OrderSuccessPage = () => {
   const searchParams = useSearchParams();
+  const typeOrder = searchParams.get('typeOrder');
   const resultCode = searchParams.get('resultCode');
   const message = searchParams.get('message');
   const orderId = searchParams.get('orderId');
@@ -27,21 +28,26 @@ const OrderSuccessPage = () => {
   if(message === 'Thành công.') {
     order.paymentInfo = {
       id: orderId,
-      status: 'PAID',
+      status: 'SUCCESS',
       type: "Momo",
       paidAt: Date.now(),
     };
+    order.status = "PROCESSING"
   } else {
     order.paymentInfo = {
       id: orderId,
       status: 'FAIL',
       type: "Momo",
+      paidAt: Date.now(),
     };
+    order.status = "PAYMENT FAIL"
   }
 
+
+
   useEffect(() => {
-    console.log(order);
-    
+    // console.log(order);
+    if(typeOrder === 'cashOnDelivery') return;
     axios.post(`${server}/order/update-order`, order, config);
   }, [])
 
@@ -52,7 +58,7 @@ const OrderSuccessPage = () => {
         <br />
         <CheckoutSteps active={3} />
         {
-          message === 'Thành công.' ? <OrderSuccess /> : <OrderFail />
+          typeOrder === 'cashOnDelivery' || message === 'Thành công.' ? <OrderSuccess /> : <OrderFail />
         }
         <Footer />
     </div>

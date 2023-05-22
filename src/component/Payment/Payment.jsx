@@ -32,14 +32,14 @@ const Payment = () => {
     setOrderData(orderData);
   }, []);
 
-  const order = {
-    cart: orderData?.cart,
-    shippingAddress: orderData?.shippingAddress,
-    user: user && user,
-    totalPrice: orderData?.totalPrice,
-  };
+  // const order = {
+  //   cart: orderData?.cart,
+  //   shippingAddress: orderData?.shippingAddress,
+  //   user: user && user,
+  //   totalPrice: orderData?.totalPrice,
+  // };
 
-  const cashOnDeliveryHandler = async (e) => {
+  const cashOnDeliveryHandler = (e) => {
     e.preventDefault();
 
     const config = {
@@ -48,21 +48,24 @@ const Payment = () => {
       },
     };
 
-    order.paymentInfo = {
+    orderData.paymentInfo = {
       status: 'WAITING',
       type: "Cash On Delivery",
     };
 
-    await axios
-    .post(`${server}/order/create-order`, order, config)
-    .then((res) => {
-      setOpen(false);
-      notification.success({message: "Order successful!"});
-      setCart([])
-      localStorage.setItem("latestOrder", JSON.stringify([]));
-      console.log(res.data)
-      router.push('/order-success')
-    });
+    orderData.status = "PROCESSING";
+
+    console.log(orderData)
+
+    axios.post(`${server}/order/update-order`, orderData, config)
+      .then((res) => {
+        setOpen(false);
+        notification.success({message: "Order successful!"});
+        // setCart([])
+        // localStorage.setItem("latestOrder", JSON.stringify([]));
+        console.log(res.data)
+        router.push('/order-success?typeOrder=cashOnDelivery')
+      });
   };
 
   const momoHandler = async (e) => {
@@ -74,14 +77,14 @@ const Payment = () => {
       },
     };
 
-    order.paymentInfo = {
+    orderData.paymentInfo = {
       status: 'WAITING',
       type: "Momo",
     };
 
-    const res = await axios.post(`${server}/momo/create-payment`, order, config);
+    const res = await axios.post(`${server}/momo/create-payment`, orderData, config);
     const payUrl = res.data?.payUrl?.paymentUrl;
-    localStorage.setItem("latestOrder", JSON.stringify(res.data?.order));
+    localStorage.setItem("latestOrder", JSON.stringify(res.data?.newOrder));
     // console.log(payUrl)
 
     router.push(payUrl);
@@ -182,17 +185,17 @@ const PaymentInfo = ({
 };
 
 const CartData = ({ orderData }) => {
-  const shipping = orderData?.shipping?.toFixed(2);
+  // const shipping = orderData?.shipping?.toFixed(2);
   return (
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Tổng tiền:</h3>
-        <h5 className="text-[18px] font-[600]">${orderData?.subTotalPrice}</h5>
+        <h5 className="text-[18px] font-[600]">${orderData?.totalPrice + orderData?.discountPrice - orderData?.shippingFee}</h5>
       </div>
       <br />
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Tiền vận chuyển:</h3>
-        <h5 className="text-[18px] font-[600]">${shipping}</h5>
+        <h5 className="text-[18px] font-[600]">${orderData?.shippingFee}</h5>
       </div>
       <br />
       <div className="flex justify-between border-b pb-3">

@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, useEffect, useRef } from "react";
 import styles from "@/src/styles/styles";
-import { Country, State } from "country-state-city";
 import axios from "axios";
 import { server } from "@/server"; 
 import { notification } from "antd";
@@ -32,7 +31,7 @@ const Checkout = () => {
 
   const [couponCode, setCouponCode] = useState("");
   const [couponCodeData, setCouponCodeData] = useState(null);
-  const [discountPrice, setDiscountPrice] = useState(null);
+  const [discountPrice, setDiscountPrice] = useState(0);
 
 
   useEffect(() => {
@@ -40,37 +39,49 @@ const Checkout = () => {
     
   }, []);
 
-  const paymentSubmit = () => {
+  const paymentSubmit = async (e) => {
+    e.preventDefault();
    if(province === "" || district === "" || town === "" || street === "" || houseNumber === "" || name === "" || phone === "" || email === "" || typeAddress === ""){
       notification.error({message: "Vui lòng nhập đầy đủ thông tin nhận hàng!"})
    } else{
-        const shippingAddress = {
-            name,
-            phone,
-            email,
-            province: province.split(',')[1],
-            district: district.split(',')[1],
-            town,
-            street,
-            houseNumber,
-            typeAddress
-        };
+      const shippingAddress = {
+          name,
+          phone,
+          email,
+          province: province.split(',')[1],
+          district: district.split(',')[1],
+          town,
+          street,
+          houseNumber,
+          typeAddress
+      };
 
-        const orderData = {
-        cart,
-        shippingAddress,
-        user,
-        totalPrice,
-        subTotalPrice,
-        shipping,
-        discountPrice,
-        };
+      const orderData = {
+      cart,
+      shippingAddress,
+      user,
+      totalPrice,
+      subTotalPrice,
+      shippingFee,
+      discountPrice,
+      };
 
-        console.log(orderData)
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
 
-    // update local storage with the updated orders array
-    localStorage.setItem("latestOrder", JSON.stringify(orderData));
-    router.push("/payment");
+      orderData.status = "WAITING PAYMENT"
+
+      await axios
+        .post(`${server}/order/create-order`, orderData, config)
+        .then((res) => {
+
+        localStorage.setItem("latestOrder", JSON.stringify(res.data?.order));
+        console.log(res.data?.order)
+        router.push("/payment");
+      });
    }
   };
 
@@ -79,8 +90,8 @@ const Checkout = () => {
     0
   );
 
-  // this is shipping cost variable
-  const shipping = subTotalPrice * 0.1;
+  // this is shippingFee cost variable
+  const shippingFee = subTotalPrice * 0.1;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -117,8 +128,8 @@ const Checkout = () => {
   const discountPercentenge = couponCodeData ? discountPrice : "";
 
   const totalPrice = couponCodeData
-    ? (subTotalPrice + shipping - discountPercentenge).toFixed(2)
-    : (subTotalPrice + shipping).toFixed(2);
+    ? (subTotalPrice + shippingFee - discountPercentenge).toFixed(2)
+    : (subTotalPrice + shippingFee).toFixed(2);
 
   console.log(discountPercentenge);
 
@@ -154,7 +165,7 @@ const Checkout = () => {
           <CartData
             handleSubmit={handleSubmit}
             totalPrice={totalPrice}
-            shipping={shipping}
+            shipping={shippingFee}
             subTotalPrice={subTotalPrice}
             couponCode={couponCode}
             setCouponCode={setCouponCode}
@@ -166,7 +177,7 @@ const Checkout = () => {
         className={`${styles.button} w-[150px] 800px:w-[280px] mt-10`}
         onClick={paymentSubmit}
       >
-        <h5 className="text-white">Thanh Toán</h5>
+        <h5 className="text-white">Đặt hàng</h5>
       </div>
     </div>
   );
