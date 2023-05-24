@@ -9,7 +9,6 @@ import styles from "@/src/styles/styles";
 import Link from "next/link";
 import { MdTrackChanges } from "react-icons/md";
 import { RxCross1 } from "react-icons/rx";
-import { Country, State } from "country-state-city";
 import axios from "axios";
 import { Button, Form, Input, Modal, Row, Select, Table, Tag, notification } from "antd";
 import { useAuth } from "@/store/auth";
