@@ -126,7 +126,7 @@ const ProfileContent = ({ active }) => {
                     type="text"
                     className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
                     required
-                    value={user.username}
+                    value={user?.username}
                     disabled
                   />
                 </div>

@@ -38,20 +38,21 @@ const Header = ({ activeHeading }) => {
 
     const handleSearchChange = (e) => {
       const term = e.target.value;
-      setSearchTerm(term);
+      
       if(term === '') {
         setSearchData([]);
         return;
       }
+      
   
       const filteredProducts =
         productData &&
         productData.filter((product) =>
           product.name.toLowerCase().includes(term.toLowerCase())
         );
-      
-      setSearchData(filteredProducts);
 
+      setSearchTerm(term);
+      setSearchData(filteredProducts);
     };
 
     window.addEventListener("scroll", () => {
@@ -110,7 +111,7 @@ const Header = ({ activeHeading }) => {
             {/* <Link href={`${isSeller ? "/dashboard" : "/shop-create"}`}> */}
               <h1 className="text-[#fff] flex items-center">
                 {/* {isSeller ? "Go Dashboard" : "Become Seller"}{" "} */}
-                Become Seller
+                Become Member
                 <IoIosArrowForward className="ml-1" />
               </h1>
             {/* </Link> */}
@@ -133,7 +134,7 @@ const Header = ({ activeHeading }) => {
               <button
                 className={`h-[100%] w-full flex justify-between items-center pl-10 bg-white font-sans text-lg font-[500] select-none rounded-t-md`}
               >
-                All Categories
+                Các thương hiệu
               </button>
               <IoIosArrowDown
                 size={20}

@@ -21,15 +21,15 @@ const DropDown = ({ categoriesData, setDropDown }) => {
               <img
                 src={i.image_Url}
                 style={{
-                  width: "25px",
-                  height: "25px",
+                  width: "40px",
+                  height: "40px",
                   objectFit: "contain",
                   marginLeft: "10px",
                   userSelect: "none",
                 }}
                 alt=""
               />
-              <h3 className="m-3 cursor-pointer select-none">{i.title}</h3>
+              <h3 className="m-3 cursor-pointer select-none font-semibold">{i.title}</h3>
             </div>
           ))}
       </div>

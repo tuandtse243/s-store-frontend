@@ -1,4 +1,3 @@
-import CustomShoes from '@/src/component/CustomShoes/CustomShoes'
 import CustomShoes2 from '@/src/component/CustomShoes/CustomShoes2'
 import Footer from '@/src/component/Footer/Footer'
 import Header from '@/src/component/Header/Header'
@@ -11,7 +10,7 @@ const CustomShoesPage = () => {
     <div>
         <Header />
         <CustomShoes2 />
-        {/* <Footer/> */}
+        <Footer/>
     </div>
   )
 }
