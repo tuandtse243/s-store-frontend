@@ -7,6 +7,8 @@ import Header from "@/src/component/Header/Header";
 import ProductCard from "@/src/component/ProductCard/ProductCard";
 import styles from "@/src/styles/styles";
 import { productData } from "@/src/static/data";
+import axios from "axios";
+import { server } from "@/server";
 
 
 const Category = ({params}) => {
@@ -14,11 +16,12 @@ const Category = ({params}) => {
     const category = params.category
 
   useEffect(() => {
-    const d =
-    productData && productData.filter((i) => i.category === category);
-    setData(d);
-    //    window.scrollTo(0,0);
+    axios.get(`${server}/product/get-product-by-category`, {
+      params: {category: category}
+    }).then((res) => setData(res.data.products))
   }, []);
+
+  // console.log(data)
 
   return (
     <div>

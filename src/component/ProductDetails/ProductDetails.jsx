@@ -13,6 +13,9 @@ import styles from "@/src/styles/styles";
 // import Ratings from "./Ratings";
 import axios from "axios";
 import Link from "next/link";
+import { Space, Tag, notification } from "antd";
+
+const { CheckableTag } = Tag;
 
 const ProductDetails = ({ data }) => {
   // const { wishlist } = useSelector((state) => state.wishlist);
@@ -22,6 +25,14 @@ const ProductDetails = ({ data }) => {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(0);
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  const handleChange = (tag, checked) => {
+    const nextSelectedTags = checked
+      ? [ tag ]
+      : selectedTags.filter((t) => t !== tag);
+    setSelectedTags(nextSelectedTags);
+  };
   // const navigate = useNavigate();
   // const dispatch = useDispatch();
   // useEffect(() => {
@@ -45,25 +56,25 @@ const ProductDetails = ({ data }) => {
 
   const removeFromWishlistHandler = (data) => {
     setClick(!click);
-    dispatch(removeFromWishlist(data));
+    // dispatch(removeFromWishlist(data));
   };
 
   const addToWishlistHandler = (data) => {
     setClick(!click);
-    dispatch(addToWishlist(data));
+    // dispatch(addToWishlist(data));
   };
 
   const addToCartHandler = (id) => {
     const isItemExists = cart && cart.find((i) => i._id === id);
     if (isItemExists) {
-      toast.error("Item already in cart!");
+      notification.error({message: "Item already in cart!"});
     } else {
       if (data.stock < 1) {
-        toast.error("Product stock limited!");
+        notification.error({message: "Product stock limited!"});
       } else {
         const cartData = { ...data, qty: count };
-        dispatch(addTocart(cartData));
-        toast.success("Item added to cart successfully!");
+        // dispatch(addTocart(cartData));
+        notification.success({message: "Item added to cart successfully!"});
       }
     }
   };
@@ -100,10 +111,10 @@ const ProductDetails = ({ data }) => {
           navigate(`/inbox?${res.data.conversation._id}`);
         })
         .catch((error) => {
-          toast.error(error.response.data.message);
+          notification.error({message: error.response.data.message});
         });
     } else {
-      toast.error("Please login to create a conversation");
+      notification.error({message: "Please login to create a conversation"});
     }
   };
 
@@ -113,49 +124,53 @@ const ProductDetails = ({ data }) => {
         <div className={`${styles.section} w-[90%] 800px:w-[80%]`}>
           <div className="w-full py-10">
             <div className="block w-full 800px:flex">
-              <div className="w-full 800px:w-[50%]">
+              <div className="w-full 800px:w-[50%] text-center">
                 <img
-                  src={`${data && data.image_Url[select].url}`}
-                  // src={`${backend_url}${data && data.images[select]}`}
+                  src={`${data && data.images[select]}`}
                   alt=""
-                  className="w-[80%]"
+                  className="w-[100%]"
                 />
-                <div className="w-full flex">
-                  {/* {data && data.images.map((i, index) => ( */}
-                  {data && data.image_Url.map((i, index) => (
+                <div className="w-full flex mt-5">
+                  {data && data.images.map((i, index) => (
                       <div
                         className={`${
                           select === index ? "border" : "null"
-                        } cursor-pointer`}
+                        } cursor-pointer p-2 flex justify-center align-middle`}
                       >
                         <img
-                          src={`${i.url}`}
-                          // src={`${backend_url}${i}`}
+                          src={i}
                           alt=""
-                          className="h-[200px] overflow-hidden mr-3 mt-3"
+                          className="h-[220px] w-[220px] overflow-hidden"
                           onClick={() => setSelect(index)}
                         />
                       </div>
                     ))}
-                  {/* <div
-                    className={`${
-                      select === 1 ? "border" : "null"
-                    } cursor-pointer`}
-                  ></div> */}
                 </div>
               </div>
-              <div className="w-full 800px:w-[50%] pt-5">
+              <div className="w-full 800px:w-[50%] pt-5 ml-[30px]">
                 <h1 className={`${styles.productTitle}`}>{data.name}</h1>
                 <p>{data.description}</p>
-                <div className="flex pt-3">
-                  <h4 className={`${styles.productDiscountPrice}`}>
-                    {data.discount_price}$
-                    {/* {data.discountPrice}$ */}
-                  </h4>
+
+                <span style={{ marginRight: 8 }}>Size:</span>
+                <Space size={[0, 8]} wrap>
+                  {data.sizes.map((tag) => (
+                    <CheckableTag
+                      key={tag}
+                      checked={selectedTags.includes(tag)}
+                      onChange={(checked) => handleChange(tag, checked)}
+                    >
+                      {tag}
+                    </CheckableTag>
+                  ))}
+                </Space>
+
+                <div className="pt-3">
                   <h3 className={`${styles.price}`}>
-                    {data.price ? data.price + "$" : null}
-                    {/* {data.originalPrice ? data.originalPrice + "$" : null} */}
+                    {data.originalPrice ? data.originalPrice + "đ" : null}
                   </h3>
+                  <h4 className={`${styles.productDiscountPrice}`}>
+                    {data.discountPrice}đ
+                  </h4>
                 </div>
 
                 <div className="flex items-center mt-12 justify-between pr-3">
@@ -201,11 +216,11 @@ const ProductDetails = ({ data }) => {
                   onClick={() => addToCartHandler(data._id)}
                 >
                   <span className="text-white flex items-center">
-                    Add to cart <AiOutlineShoppingCart className="ml-1" />
+                    Thêm vào giỏ <AiOutlineShoppingCart className="ml-1" />
                   </span>
                 </div>
                 <div className="flex items-center pt-8">
-                  <Link href={`/shop/preview/${data?.shop._id}`}>
+                  <Link href={`/shop/preview/`}>
                     <img
                       // src={`${backend_url}${data?.shop?.avatar}`}
                       src={`${data?.shop?.shop_avatar.url}`}
@@ -214,9 +229,9 @@ const ProductDetails = ({ data }) => {
                     />
                   </Link>
                   <div className="pr-8">
-                    <Link href={`/shop/preview/${data?.shop._id}`}>
+                    <Link href={`/shop/preview/`}>
                       <h3 className={`${styles.shop_name} pb-1 pt-1`}>
-                        {data.shop.name}
+                        {data.category}
                       </h3>
                     </Link>
                     <h5 className="pb-3 text-[15px]">
@@ -236,14 +251,7 @@ const ProductDetails = ({ data }) => {
               </div>
             </div>
           </div>
-          <ProductDetailsInfo
-            data={data}
-            // products={products}
-            // totalReviewsLength={totalReviewsLength}
-            // averageRating={averageRating}
-            totalReviewsLength={20}
-            averageRating={5}
-          />
+          <ProductDetailsInfo data={data} />
           <br />
           <br />
         </div>
@@ -252,12 +260,7 @@ const ProductDetails = ({ data }) => {
   );
 };
 
-const ProductDetailsInfo = ({
-  data,
-  // products,
-  totalReviewsLength,
-  averageRating,
-}) => {
+const ProductDetailsInfo = ({ data }) => {
   const [active, setActive] = useState(1);
 
   return (
@@ -289,19 +292,6 @@ const ProductDetailsInfo = ({
             <div className={`${styles.active_indicator}`} />
           ) : null}
         </div>
-        <div className="relative">
-          <h5
-            className={
-              "text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"
-            }
-            onClick={() => setActive(3)}
-          >
-            Seller Information
-          </h5>
-          {active === 3 ? (
-            <div className={`${styles.active_indicator}`} />
-          ) : null}
-        </div>
       </div>
       {active === 1 ? (
         <>
@@ -314,7 +304,7 @@ const ProductDetailsInfo = ({
       {active === 2 ? (
         <div className="w-full min-h-[40vh] flex flex-col items-center py-5 overflow-y-scroll">
           {data &&
-            data.reviews.map((item, index) => (
+            data?.reviews?.map((item, index) => (
               <div className="w-full flex my-2">
                 <img
                   src={`${backend_url}/${item.user.avatar}`}
@@ -332,64 +322,12 @@ const ProductDetailsInfo = ({
             ))}
 
           <div className="w-full flex justify-center">
-            {data && data.reviews.length === 0 && (
+            {data && data?.reviews?.length === 0 && (
               <h5>No Reviews have for this product!</h5>
             )}
           </div>
         </div>
       ) : null}
-
-      {active === 3 && (
-        <div className="w-full block 800px:flex p-5 py-8">
-          <div className="w-full 800px:w-[50%]">
-            <Link href={`/shop/preview/${data.shop._id}`}>
-              <div className="flex items-center">
-                <img
-                  src={`${data?.shop?.shop_avatar.url}`}
-                  // src={`${backend_url}${data?.shop?.avatar}`}
-                  className="w-[50px] h-[50px] rounded-full"
-                  alt=""
-                />
-                <div className="pl-3">
-                  <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
-                  <h5 className="pb-2 text-[15px]">
-                    ({averageRating}/5) Ratings
-                  </h5>
-                </div>
-              </div>
-            </Link>
-            <p className="pt-2">{data.shop.description}</p>
-          </div>
-          <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
-            <div className="text-left">
-              <h5 className="font-[600]">
-                Joined on:{" "}
-                <span className="font-[500]">
-                  {data.shop?.createdAt?.slice(0, 10)}
-                </span>
-              </h5>
-              <h5 className="font-[600] pt-3">
-                Total Products:{" "}
-                <span className="font-[500]">
-                  10
-                  {/* {products && products.length} */}
-                </span>
-              </h5>
-              <h5 className="font-[600] pt-3">
-                Total Reviews:{" "}
-                <span className="font-[500]">{totalReviewsLength}</span>
-              </h5>
-              <Link href="/">
-                <div
-                  className={`${styles.button} !rounded-[4px] !h-[39.5px] mt-3`}
-                >
-                  <h4 className="text-white">Visit Shop</h4>
-                </div>
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

@@ -44,6 +44,7 @@ const CreateProduct = () => {
   };
 
   const handleChange = (value) => {
+    // console.log(value)
     setSize(value)
   };
 
@@ -87,7 +88,6 @@ const CreateProduct = () => {
     } else {
         console.log(res.data.message)
     }
-
   };
 
   return (

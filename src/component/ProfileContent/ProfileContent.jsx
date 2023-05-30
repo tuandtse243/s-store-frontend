@@ -20,11 +20,12 @@ import Town from '../../../public/address/xa_phuong.json';
 
 const ProfileContent = ({ active }) => {
   const user = useAuth((state) => state.auth);
+  const setAuth = useAuth((state) => state.setAuth)
   const [name, setName] = useState(user && user.name);
   const [email, setEmail] = useState(user && user.email);
   const [phone, setPhone] = useState(user && user.phone);
   const [password, setPassword] = useState("");
-  const [avatar, setAvatar] = useState(null);
+  const [avatar, setAvatar] = useState(user.avatar);
 
 
   const handleSubmit = (e) => {
@@ -34,25 +35,26 @@ const ProfileContent = ({ active }) => {
 
   const handleImage = async (e) => {
     const file = e.target.files[0];
-    setAvatar(file);
+    // console.log(file)
+    // setAvatar(file);
 
     const formData = new FormData();
 
-    formData.append("image", e.target.files[0]);
+    formData.append("image", file);
+    formData.append("id", user._id);
+
+    const config = { headers: { "Content-Type": "multipart/form-data" } };
 
     await axios
-      .put(`${server}/user/update-avatar`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      })
+      .post(`${server}/user/update-avatar`, formData, config)
       .then((response) => {
-         dispatch(loadUser());
-         toast.success("avatar updated successfully!");
+        //  console.log(response.data.newUser)
+         setAuth({...user, avatar: response.data.secure_url})
+         setAvatar(response.data.secure_url)
+         notification.success({message: "Cập nhật avatar thành công!"});
       })
       .catch((error) => {
-        toast.error(error);
+        notification.error({message: error});
       });
   };
 
@@ -64,7 +66,7 @@ const ProfileContent = ({ active }) => {
           <div className="flex justify-center w-full">
             <div className="relative">
               <img
-                src={`${backend_url}${user?.avatar}`}
+                src={avatar}
                 className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
                 alt=""
               />
@@ -73,7 +75,7 @@ const ProfileContent = ({ active }) => {
                   type="file"
                   id="image"
                   className="hidden"
-                  onChange={handleImage}
+                  onChange={(e) => handleImage(e)}
                 />
                 <label htmlFor="image">
                   <AiOutlineCamera />
@@ -173,7 +175,7 @@ const ProfileContent = ({ active }) => {
       {/*  user Address */}
       {active === 7 && (
         <div>
-          <Address />
+          {/* <Address /> */}
         </div>
       )}
     </div>

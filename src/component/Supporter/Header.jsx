@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 import { AiOutlineGift } from "react-icons/ai";
 import { MdOutlineLocalOffer } from "react-icons/md";
@@ -5,9 +6,11 @@ import { FiPackage, FiShoppingBag } from "react-icons/fi";
 import { BiMessageSquareDetail } from "react-icons/bi";
 import { backend_url } from "@/server";
 import Link from "next/link";
+import { useAuth } from "@/store/auth";
 
 const SupporterHeader = () => {
-//   const { seller } = useSelector((state) => state.seller);
+  const user = useAuth((state) => state.auth);
+
   return (
     <div className="w-full h-[80px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
       <div>
@@ -52,7 +55,7 @@ const SupporterHeader = () => {
           {/* <Link href={`/supporter/${supporter._id}`}> */}
             <img
             //   src={`${backend_url}${seller.avatar}`}
-              src={`${backend_url}`}
+              src={user.avatar}
               alt=""
               className="w-[50px] h-[50px] rounded-full object-cover"
             />

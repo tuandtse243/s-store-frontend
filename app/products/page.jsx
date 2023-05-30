@@ -14,27 +14,13 @@ const ProductsPage = () => {
 //   const {allProducts,isLoading} = useSelector((state) => state.products);
   const [data, setData] = useState(productData);
 
-  const isAuthenticated = useIsAuthenticated((state) => state.isAuthenticated);
-    const auth = useAuth((state) => state.auth);
-    console.log(isAuthenticated)
-    console.log(auth)
+  // const isAuthenticated = useIsAuthenticated((state) => state.isAuthenticated);
+  // const auth = useAuth((state) => state.auth);
 
   useEffect(() => {
-    const d = productData && productData.sort((a, b) => a.price - b.price)
-    setData(d)
+    // const d = productData && productData.sort((a, b) => a.price - b.price)
+    // setData(d)
   }, [])
-  
-//   useEffect(() => {
-//     if (categoryData === null) {
-//       const d = allProducts;
-//       setData(d);
-//     } else {
-//       const d =
-//       allProducts && allProducts.filter((i) => i.category === categoryData);
-//       setData(d);
-//     }
-//     //    window.scrollTo(0,0);
-//   }, [allProducts]);
 
   return (
   <div>

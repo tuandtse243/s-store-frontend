@@ -37,31 +37,31 @@ const Header = ({ activeHeading }) => {
     const [open, setOpen] = useState(false);
 
     const handleSearchChange = (e) => {
-      const term = e.target.value;
+      // const term = e?.target?.value;
       
-      if(term === '') {
-        setSearchData([]);
-        return;
-      }
+      // if(term === '') {
+      //   setSearchData([]);
+      //   return;
+      // }
       
   
-      const filteredProducts =
-        productData &&
-        productData.filter((product) =>
-          product.name.toLowerCase().includes(term.toLowerCase())
-        );
+      // const filteredProducts =
+      //   productData &&
+      //   productData.filter((product) =>
+      //     product.name.toLowerCase().includes(term.toLowerCase())
+      //   );
 
-      setSearchTerm(term);
-      setSearchData(filteredProducts);
+      // setSearchTerm(term);
+      // setSearchData(filteredProducts);
     };
 
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 70) {
-        setActive(true);
-      } else {
-        setActive(false);
-      }
-    });
+    // window.addEventListener("scroll", () => {
+    //   if (window.scrollY > 70) {
+    //     setActive(true);
+    //   } else {
+    //     setActive(false);
+    //   }
+    // });
 
   return (
     <div>
@@ -188,7 +188,7 @@ const Header = ({ activeHeading }) => {
                 { isAuthenticated ? (
                   <Link href="/profile">
                     <img
-                      src={`${backend_url}${auth.user?.avatar}`}
+                      src={auth.avatar}
                       className="w-[35px] h-[35px] rounded-full"
                       alt=""
                     />
@@ -237,7 +237,7 @@ const Header = ({ activeHeading }) => {
               onClick={() => setOpenCart(true)}
             >
               <AiOutlineShoppingCart size={30} />
-              <span class="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
+              <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
                 {/* {cart && cart.length} */}
                 10
               </span>
@@ -263,7 +263,7 @@ const Header = ({ activeHeading }) => {
                     onClick={() => setOpenWishlist(true) || setOpen(false)}
                   >
                     <AiOutlineHeart size={30} className="mt-5 ml-3" />
-                    <span class="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
+                    <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
                       {/* {wishlist && wishlist.length} */}
                       10
                     </span>

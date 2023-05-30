@@ -11,8 +11,8 @@ import { Color } from 'three'
 const Model = ({ images, setImages }) => {
     const router = useRouter();
     const shoe = useRef();
-    const { nodes, materials } = useGLTF('/shoe.glb', true)
-    console.log(nodes)
+    const { nodes, materials } = useGLTF('/shoe.glb')
+    // console.log(nodes)
 
     // useFrame(() => {
     //   shoe.current.rotation.x += 0.00005;
@@ -63,9 +63,7 @@ const Model = ({ images, setImages }) => {
             <mesh geometry={nodes.Plane_1.geometry} material={materials['BottumBack.001']} />
           </group>
           <group position={[-0.02, 0.43, -0.52]}>
-            <mesh geometry={nodes.Cube004.geometry} material={materials.Main}>
-              {/* <meshStandardMaterial attach="material" color={pickColor['main']} roughness={0.15} transparent/> */}
-            </mesh>
+            <mesh geometry={nodes.Cube004.geometry} material={materials.Main}/>
             <mesh geometry={nodes.Cube004_1.geometry} material={materials.Upper} />
           </group>
           <mesh geometry={nodes.AIr_Max_Logo_2.geometry} material={materials['BottumBack.002']} position={[-0.01, 0.54, -1.57]} rotation={[Math.PI / 2, 0.89, Math.PI]} scale={0.02} />
