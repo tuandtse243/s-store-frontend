@@ -190,12 +190,12 @@ const CartData = ({ orderData }) => {
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Tổng tiền:</h3>
-        <h5 className="text-[18px] font-[600]">${orderData?.totalPrice + orderData?.discountPrice - orderData?.shippingFee}</h5>
+        <h5 className="text-[18px] font-[600]">{orderData?.totalPrice + orderData?.discountPrice - orderData?.shippingFee} VNĐ</h5>
       </div>
       <br />
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Tiền vận chuyển:</h3>
-        <h5 className="text-[18px] font-[600]">${orderData?.shippingFee}</h5>
+        <h5 className="text-[18px] font-[600]">{orderData?.shippingFee} VNĐ</h5>
       </div>
       <br />
       <div className="flex justify-between border-b pb-3">
@@ -203,7 +203,7 @@ const CartData = ({ orderData }) => {
         <h5 className="text-[18px] font-[600]">{orderData?.discountPrice? "$" + orderData.discountPrice : "-"}</h5>
       </div>
       <h5 className="text-[18px] font-[600] text-end pt-3">
-        ${orderData?.totalPrice}
+        {orderData?.totalPrice} VNĐ
       </h5>
       <br />
     </div>

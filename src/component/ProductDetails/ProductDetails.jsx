@@ -14,18 +14,20 @@ import styles from "@/src/styles/styles";
 import axios from "axios";
 import Link from "next/link";
 import { Space, Tag, notification } from "antd";
+import { useCart } from "@/store/cart";
 
 const { CheckableTag } = Tag;
 
 const ProductDetails = ({ data }) => {
   // const { wishlist } = useSelector((state) => state.wishlist);
-  // const { cart } = useSelector((state) => state.cart);
   // const { user, isAuthenticated } = useSelector((state) => state.user);
   // const { products } = useSelector((state) => state.products);
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(0);
   const [selectedTags, setSelectedTags] = useState([]);
+  const cart = useCart((state) => state.cart);
+  const setCart = useCart((state) => state.setCart);
 
   const handleChange = (tag, checked) => {
     const nextSelectedTags = checked
@@ -33,8 +35,7 @@ const ProductDetails = ({ data }) => {
       : selectedTags.filter((t) => t !== tag);
     setSelectedTags(nextSelectedTags);
   };
-  // const navigate = useNavigate();
-  // const dispatch = useDispatch();
+
   // useEffect(() => {
   //   dispatch(getAllProductsShop(data && data?.shop._id));
   //   if (wishlist && wishlist.find((i) => i._id === data?._id)) {
@@ -67,54 +68,15 @@ const ProductDetails = ({ data }) => {
   const addToCartHandler = (id) => {
     const isItemExists = cart && cart.find((i) => i._id === id);
     if (isItemExists) {
-      notification.error({message: "Item already in cart!"});
+      notification.error({message: "Sản phẩm đã tồn tại trong giỏ hàng!"});
     } else {
       if (data.stock < 1) {
-        notification.error({message: "Product stock limited!"});
+        notification.error({message: "Số lượng còn lại không đủ!"});
       } else {
-        const cartData = { ...data, qty: count };
-        // dispatch(addTocart(cartData));
-        notification.success({message: "Item added to cart successfully!"});
+        const cartData = { ...data, qty: count, size: selectedTags[0] };
+        setCart([...cart, cartData]);
+        notification.success({message: "Thêm sản phẩm vào giỏ thành công!"});
       }
-    }
-  };
-
-  // const totalReviewsLength =
-  //   products &&
-  //   products.reduce((acc, product) => acc + product.reviews.length, 0);
-
-  // const totalRatings =
-  //   products &&
-  //   products.reduce(
-  //     (acc, product) =>
-  //       acc + product.reviews.reduce((sum, review) => sum + review.rating, 0),
-  //     0
-  //   );
-
-  // const avg =  totalRatings / totalReviewsLength || 0;
-
-  // const averageRating = avg.toFixed(2);
-
-
-  const handleMessageSubmit = async () => {
-    if (isAuthenticated) {
-      const groupTitle = data._id + user._id;
-      const userId = user._id;
-      const sellerId = data.shop._id;
-      await axios
-        .post(`${server}/conversation/create-new-conversation`, {
-          groupTitle,
-          userId,
-          sellerId,
-        })
-        .then((res) => {
-          navigate(`/inbox?${res.data.conversation._id}`);
-        })
-        .catch((error) => {
-          notification.error({message: error.response.data.message});
-        });
-    } else {
-      notification.error({message: "Please login to create a conversation"});
     }
   };
 
@@ -123,7 +85,7 @@ const ProductDetails = ({ data }) => {
       {data ? (
         <div className={`${styles.section} w-[90%] 800px:w-[80%]`}>
           <div className="w-full py-10">
-            <div className="block w-full 800px:flex">
+            <div className="block w-full 800px:flex mt-10">
               <div className="w-full 800px:w-[50%] text-center">
                 <img
                   src={`${data && data.images[select]}`}
@@ -147,7 +109,8 @@ const ProductDetails = ({ data }) => {
                     ))}
                 </div>
               </div>
-              <div className="w-full 800px:w-[50%] pt-5 ml-[30px]">
+              <div className="w-full 800px:w-[50%] ml-[30px]">
+                <h4 className={`${styles.productTitle} italic hover:underline hover:cursor-pointer`}>{data.category}</h4>
                 <h1 className={`${styles.productTitle}`}>{data.name}</h1>
                 <p>{data.description}</p>
 
@@ -218,35 +181,6 @@ const ProductDetails = ({ data }) => {
                   <span className="text-white flex items-center">
                     Thêm vào giỏ <AiOutlineShoppingCart className="ml-1" />
                   </span>
-                </div>
-                <div className="flex items-center pt-8">
-                  <Link href={`/shop/preview/`}>
-                    <img
-                      // src={`${backend_url}${data?.shop?.avatar}`}
-                      src={`${data?.shop?.shop_avatar.url}`}
-                      alt=""
-                      className="w-[50px] h-[50px] rounded-full mr-2"
-                    />
-                  </Link>
-                  <div className="pr-8">
-                    <Link href={`/shop/preview/`}>
-                      <h3 className={`${styles.shop_name} pb-1 pt-1`}>
-                        {data.category}
-                      </h3>
-                    </Link>
-                    <h5 className="pb-3 text-[15px]">
-                      5 Ratings
-                      {/* ({averageRating}/5) Ratings */}
-                    </h5>
-                  </div>
-                  <div
-                    className={`${styles.button} bg-[#6443d1] mt-4 !rounded !h-11`}
-                    onClick={handleMessageSubmit}
-                  >
-                    <span className="text-white flex items-center">
-                      Send Message <AiOutlineMessage className="ml-1" />
-                    </span>
-                  </div>
                 </div>
               </div>
             </div>

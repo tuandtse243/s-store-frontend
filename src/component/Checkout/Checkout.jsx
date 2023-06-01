@@ -86,7 +86,7 @@ const Checkout = () => {
   };
 
   const subTotalPrice = cart.reduce(
-    (acc, item) => acc + item.qty * item?.price,
+    (acc, item) => acc + item.qty * item?.discountPrice,
     0
   );
 
@@ -128,8 +128,8 @@ const Checkout = () => {
   const discountPercentenge = couponCodeData ? discountPrice : "";
 
   const totalPrice = couponCodeData
-    ? (subTotalPrice + shippingFee - discountPercentenge).toFixed(2)
-    : (subTotalPrice + shippingFee).toFixed(2);
+    ? (subTotalPrice + shippingFee - discountPercentenge)
+    : (subTotalPrice + shippingFee);
 
   console.log(discountPercentenge);
 
@@ -404,12 +404,12 @@ const CartData = ({
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Tổng tiền:</h3>
-        <h5 className="text-[18px] font-[600]">${subTotalPrice}</h5>
+        <h5 className="text-[18px] font-[600]">{subTotalPrice} VNĐ</h5>
       </div>
       <br />
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Tiền vận chuyển:</h3>
-        <h5 className="text-[18px] font-[600]">${shipping.toFixed(2)}</h5>
+        <h5 className="text-[18px] font-[600]">{shipping} VNĐ</h5>
       </div>
       <br />
       <div className="flex justify-between border-b pb-3">
@@ -418,7 +418,7 @@ const CartData = ({
           - {discountPercentenge ? "$" + discountPercentenge.toString() : null}
         </h5>
       </div>
-      <h5 className="text-[18px] font-[600] text-end pt-3">${totalPrice}</h5>
+      <h5 className="text-[18px] font-[600] text-end pt-3">{totalPrice} VNĐ</h5>
       <br />
       <form onSubmit={handleSubmit}>
         <input

@@ -14,36 +14,9 @@ const Cart = ({ setOpenCart }) => {
   const cart = useCart((state) => state.cart);
 
   const totalPrice = cart.reduce(
-    (acc, item) => acc + item.qty * item.price,
+    (acc, item) => acc + item.qty * item.discountPrice,
     0
   );
-
-  const cartData = [
-    {
-        name: 'Iphone 14 pro max 256 gb ssd and  8gb',
-        description: 'test',
-        price: 700,
-
-    },
-    {
-        name: 'Iphone 14 pro max 256 gb ssd and  8gb',
-        description: 'test',
-        price: 700,
-
-    },
-    {
-        name: 'Iphone 14 pro max 256 gb ssd and  8gb',
-        description: 'test',
-        price: 700,
-
-    },
-    {
-        name: 'Iphone 14 pro max 256 gb ssd and  8gb',
-        description: 'test',
-        price: 700,
-
-    },
-  ]
 
   return (
     <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
@@ -57,7 +30,7 @@ const Cart = ({ setOpenCart }) => {
                 onClick={() => setOpenCart(false)}
                 />
             </div>
-            <h5>Cart Items is empty!</h5>
+            <h5>Giỏ hàng trống!</h5>
           </div>
         ) : (
           <>
@@ -72,7 +45,7 @@ const Cart = ({ setOpenCart }) => {
               {/* Item length */}
               <div className={`${styles.noramlFlex} p-4`}>
                 <IoBagHandleOutline size={25} />
-                <h5 className="pl-2 text-[20px] font-[500]">{cart && cart.length} items</h5>
+                <h5 className="pl-2 text-[20px] font-[500]">{cart && cart.length} Sản phẩm</h5>
               </div>
 
               {/* cart Single Items */}
@@ -94,7 +67,7 @@ const Cart = ({ setOpenCart }) => {
                   className={`h-[45px] flex items-center justify-center w-[100%] bg-[#e44343] rounded-[5px]`}
                 >
                   <h1 className="text-[#fff] text-[18px] font-[600]">
-                    Checkout Now (USD${totalPrice})
+                    Thanh toán ({totalPrice} VNĐ)
                   </h1>
                 </div>
               </Link>
@@ -110,8 +83,7 @@ const CartSingle = ({ data }) => {
   const setCart = useCart((state) => state.setCart);
   const cart = useCart((state) => state.cart);
 
-//   const totalPrice = data.discountPrice * value;
-  const totalPrice = data.price * data.qty;
+  const totalPrice = data.discountPrice * data.qty;
 
   const increment = (data) => {
     if (data.stock < data.qty) {
@@ -143,7 +115,6 @@ const CartSingle = ({ data }) => {
 
   const removeFromCartHandler = (data) => {
     const newCart = cart.filter((item) => item.name !== data.name);
-    console.log(newCart)
     setCart(newCart)
   }
 
@@ -151,25 +122,20 @@ const CartSingle = ({ data }) => {
     <div className="border-b p-4">
       <div className="w-full flex items-center">
         
-        {/* <img
-          src={`${backend_url}${data?.images[0]}`}
+        <img
+          src={data?.images[0]}
           alt=""
           className="w-[130px] h-min ml-2 mr-2 rounded-[5px]"
-        /> */}
+        />
         <div className="pl-[5px] w-[100%]">
           <h1>{data.name}</h1>
-          {/* <h4 className="font-[400] text-[15px] text-[#00000082]">
-            ${data.discountPrice} * {value}
-          </h4>
-          <h4 className="font-[600] text-[17px] pt-[3px] text-[#d02222] font-Roboto">
-            US${totalPrice}
-          </h4> */}
+          <h2>Size: {data?.size}</h2>
           <h4 className="font-[400] text-[15px] text-[#00000082]">
-            ${data.price} * {data.qty}
+            {data.discountPrice} VNĐ
           </h4>
           <div className="flex">
             <h4 className="font-[600] text-[17px] pt-[3px] text-[#d02222] font-Roboto">
-                US${totalPrice}
+                {totalPrice} VNĐ
             </h4>
             <div className="flex ml-5">
                 <div

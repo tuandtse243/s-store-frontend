@@ -76,8 +76,8 @@ const CreateProduct = () => {
     );
     if(res.data.success) {
         notification.success({message: 'Create product successful'});
-        // setImages([])
-        // setName(null)
+        setImages([])
+        setName('')
         // setDescription(null)
         // setCategory(null)
         // setTags(null)
@@ -258,7 +258,7 @@ const CreateProduct = () => {
           </label>
           <input
             type="file"
-            name=""
+            name="image"
             id="upload"
             className="hidden"
             multiple
