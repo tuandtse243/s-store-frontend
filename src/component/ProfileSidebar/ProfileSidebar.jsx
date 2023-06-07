@@ -17,29 +17,26 @@ import { notification } from "antd";
 import { useAuth, useIsAuthenticated } from "@/store/auth";
 
 const ProfileSidebar = ({ setActive, active }) => {
-//   const navigate = useNavigate();
-//  const {user} = useSelector((state) => state.user);
     const auth = useAuth((state) => state.auth);
     const setAuth = useAuth((state) => state.setAuth);
-    // const isAuthenticated = useIsAuthenticated((state) => state.isAuthenticated)
     const setIsAuthenticated = useIsAuthenticated((state) => state.setIsAuthenticated)
 
     const router = useRouter()
     const user = auth
 
   const logoutHandler = () => {
-    axios
-      .get(`${server}/user/logout`, { withCredentials: true })
-      .then((res) => {
+    // axios
+    //   .get(`${server}/user/logout`, { withCredentials: true })
+    //   .then((res) => {
         setAuth({})
         setIsAuthenticated(false)
-        notification.success({message: res.data.message});
-        // window.location.reload(true);
-        router.push("/login");
-      })
-      .catch((error) => {
-        console.log(error.response.data.message);
-      });
+        localStorage.setItem("token", "");
+        notification.success({message: "Logged out successfully"});
+        router.push("/");
+      // })
+      // .catch((error) => {
+      //   console.log(error.response.data.message);
+      // });
   };
   return (
     <div className="w-full bg-white shadow-sm rounded-[10px] p-4 pt-8">

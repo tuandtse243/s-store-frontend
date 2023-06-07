@@ -2,7 +2,7 @@
 
 
 import Link from 'next/link';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '@/src/styles/styles';
 import { categoriesData, productData } from "../../static/data";
 import {
@@ -17,7 +17,6 @@ import { RxCross1 } from "react-icons/rx";
 import DropDown from '../DropDown/DropDown';
 import Navbar from '../Navbar/Navbar';
 import { useIsAuthenticated, useAuth } from '@/store/auth';
-import { backend_url } from '@/server';
 import Cart from '../Cart/Cart';
 import Wishlist from '../Wishlist/Wishlist';
 import { useCart } from '@/store/cart';
@@ -36,32 +35,36 @@ const Header = ({ activeHeading }) => {
     const [openWishlist, setOpenWishlist] = useState(false);
     const [open, setOpen] = useState(false);
 
+    useEffect(() => {
+      setSearchTerm('')
+    }, [])
+
     const handleSearchChange = (e) => {
-      // const term = e?.target?.value;
+      const term = e?.target?.value;
       
-      // if(term === '') {
-      //   setSearchData([]);
-      //   return;
-      // }
+      if(term === '') {
+        setSearchData([]);
+        return;
+      }
       
   
-      // const filteredProducts =
-      //   productData &&
-      //   productData.filter((product) =>
-      //     product.name.toLowerCase().includes(term.toLowerCase())
-      //   );
+      const filteredProducts =
+        productData &&
+        productData.filter((product) =>
+          product.name.toLowerCase().includes(term.toLowerCase())
+        );
 
-      // setSearchTerm(term);
-      // setSearchData(filteredProducts);
+      setSearchTerm(term);
+      setSearchData(filteredProducts);
     };
 
-    // window.addEventListener("scroll", () => {
-    //   if (window.scrollY > 70) {
-    //     setActive(true);
-    //   } else {
-    //     setActive(false);
-    //   }
-    // });
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 70) {
+        setActive(true);
+      } else {
+        setActive(false);
+      }
+    });
 
   return (
     <div>
@@ -78,7 +81,7 @@ const Header = ({ activeHeading }) => {
               type="text"
               placeholder="Search Product..."
               value={searchTerm}
-              onChange={handleSearchChange}
+              onChange={(e) => handleSearchChange(e)}
               className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
             />
             <AiOutlineSearch
@@ -188,7 +191,7 @@ const Header = ({ activeHeading }) => {
                 { isAuthenticated ? (
                   <Link href="/profile">
                     <img
-                      src={auth.avatar}
+                      src={auth?.avatar}
                       className="w-[35px] h-[35px] rounded-full"
                       alt=""
                     />

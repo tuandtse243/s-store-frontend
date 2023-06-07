@@ -3,26 +3,24 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import Link from "next/link";
 // import { deleteProduct } from "../../redux/actions/product";
-import { Space, Table, Tag } from 'antd';
+import { Space, Table, Tag, notification } from 'antd';
 import { server } from "@/server";
 import axios from "axios";
 import Loader from "../Loader/Loader";
 
 const AllProducts = () => {
-//   const { seller } = useSelector((state) => state.seller);
     const [data, setData] = useState(false)
 
 
   useEffect(() => {
-    axios.get(`${server}/product/get-all-products`)
-    .then((res) => setData(res?.data?.products));
-    // 
+    axios.get(`${server}/product/get-all-products`, {
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => setData(res?.data?.products))
+    .catch((err) => notification.error({message: err?.response?.data?.message}));
   }, []);
-
-//   const handleDelete = (id) => {
-//     dispatch(deleteProduct(id));
-//     window.location.reload();
-//   };
 
   const handleDelete = (key) => {
     console.log(key)

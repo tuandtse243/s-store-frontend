@@ -171,7 +171,7 @@ const AllOrders = () => {
         <Loader />
       )}
 
-      <Modal title="Basic Modal" footer={null} open={isModalOpen}>
+      <Modal title="" footer={null} open={isModalOpen}>
         <Form
             layout='vertical'
             form={form}

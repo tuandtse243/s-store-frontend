@@ -25,7 +25,7 @@ const ProfileContent = ({ active }) => {
   const [email, setEmail] = useState(user && user.email);
   const [phone, setPhone] = useState(user && user.phone);
   const [password, setPassword] = useState("");
-  const [avatar, setAvatar] = useState(user.avatar);
+  const [avatar, setAvatar] = useState(user?.avatar);
 
 
   const handleSubmit = (e) => {

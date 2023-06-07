@@ -35,12 +35,15 @@ const Login = () => {
         { withCredentials: true }
       )
       .then(async (res) => {
-        // window.location.reload(true);
         // router.refresh();
         notification.success({message: "Login successfully!"});
         setAuth(res.data.user);
         setIsAuthenticated(true);
-        router.push('/');
+        if(res.data.user.role === "supporter") {
+          router.push('/supporter');
+        } else {
+          router.push('/');
+        }
       })
       .catch((err) => {
         // notification.error({message: "Login fail!"})

@@ -1,5 +1,5 @@
 'use client'
-import server from '@/server';
+import { server } from '@/server'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -7,30 +7,38 @@ import { useIsAuthenticated, useAuth } from '@/store/auth';
 
 const Activation = ({ params }) => {
   const router = useRouter();
-  const activation_token = params.activation_token
+  const activation_token = params.activation_token;
+  const [data, setData] = useState(null)
   const [error, setError] = useState(false);
   const setIsAuthenticated = useIsAuthenticated((state) => state.setIsAuthenticated)
-  const setAuth = ((state) => state.setAuth)
+  const setAuth = useAuth((state) => state.setAuth)
 
   useEffect(() => {
     if(activation_token) {
-      const activationEmail = async () => {
+      const activationEmail = () => {
         try {
-          const res = await axios.post(`${server}/user/activation`, {
+          axios.post(`${server}/user/activation`, {
             activation_token,
+          }).then((res) => {
+            setData(res.data)
           });
-          console.log(res.data.message)
-          setIsAuthenticated(true)
-          setAuth(res.user)
-          router.push('/')
         } catch (error) {
-          console.log(error.response.data.message);
+          console.log(error.response?.data?.message);
           setError(true)         
         };
       };
       activationEmail();
     }
-  }, [activation_token])
+  }, [activation_token]);
+
+
+  if(data) {
+    localStorage.setItem('token', data.token)
+    setIsAuthenticated(true)
+    console.log(data.user)
+    setAuth(data.user)
+    router.push('/')
+  }
 
   return (
     <div

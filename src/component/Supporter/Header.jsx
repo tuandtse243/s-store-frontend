@@ -52,10 +52,8 @@ const SupporterHeader = () => {
             />
           </Link>
           <Link href='/supporter'>
-          {/* <Link href={`/supporter/${supporter._id}`}> */}
             <img
-            //   src={`${backend_url}${seller.avatar}`}
-              src={user.avatar}
+              src={user?.avatar}
               alt=""
               className="w-[50px] h-[50px] rounded-full object-cover"
             />
