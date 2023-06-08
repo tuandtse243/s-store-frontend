@@ -128,14 +128,16 @@ const OrderCustomShoes = () => {
             .post(`${server}/order/create-order`, orderData, config)
             .then((res) => {
                 localStorage.setItem("latestOrder", JSON.stringify(res.data?.order));
-                const request = window.indexedDB.open('myDatabase', 1);
-                request.onsuccess = (event) => {
-                    const db = event.target.result;
-
-                    // Call deleteObjectStore function with the desired object store name
-                    const objectStoreToDelete = 'ImageStore';
-                    deleteObjectStore(db, objectStoreToDelete);
-                };
+                if (typeof window !== "undefined") {
+                  // Client-side-only code
+                  const request = window.indexedDB.open('myDatabase', 1);
+                  request.onsuccess = (event) => {
+                      const db = event.target.result;
+                      // Call deleteObjectStore function with the desired object store name
+                      const objectStoreToDelete = 'ImageStore';
+                      deleteObjectStore(db, objectStoreToDelete);
+                  };
+                }
                 router.push("/payment");
           });
        }

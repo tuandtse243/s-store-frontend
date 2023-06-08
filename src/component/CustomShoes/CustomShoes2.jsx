@@ -26,12 +26,13 @@ const Model = ({ images, setImages }) => {
          button(() => {
           const link = document.createElement('a')
           const image = gl.domElement.toDataURL('image/png').split(',')[1];
-
-          const request = window.indexedDB.open('myDatabase', 1);
-          request.onsuccess = (event) => {
-            const db = event.target.result;
-            saveData(db, image);
-          };
+          if (typeof window !== "undefined") {
+            const request = window.indexedDB.open('myDatabase', 1);
+            request.onsuccess = (event) => {
+              const db = event.target.result;
+              saveData(db, image);
+            };
+          }
 
           images.push(image)
           setImages(images)

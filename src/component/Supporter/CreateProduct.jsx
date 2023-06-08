@@ -25,17 +25,6 @@ const CreateProduct = () => {
   const [discountPrice, setDiscountPrice] = useState();
   const [stock, setStock] = useState();
 
-//   useEffect(() => {
-//     if (error) {
-//       notification.error({message: error});
-//     }
-//     if (success) {
-//       notification.success({message: "Product created successfully!"});
-//       router.push("/supporter");
-//       window.location.reload();
-//     }
-//   }, [dispatch, error, success]);
-
   const handleImageChange = (e) => {
     e.preventDefault();
 

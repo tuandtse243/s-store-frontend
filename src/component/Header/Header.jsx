@@ -36,7 +36,14 @@ const Header = ({ activeHeading }) => {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
-      setSearchTerm('')
+      setSearchTerm('');
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 70) {
+          setActive(true);
+        } else {
+          setActive(false);
+        }
+      });
     }, [])
 
     const handleSearchChange = (e) => {
@@ -58,13 +65,7 @@ const Header = ({ activeHeading }) => {
       setSearchData(filteredProducts);
     };
 
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 70) {
-        setActive(true);
-      } else {
-        setActive(false);
-      }
-    });
+    
 
   return (
     <div>
