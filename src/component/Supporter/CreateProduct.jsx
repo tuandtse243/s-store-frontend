@@ -73,9 +73,9 @@ const CreateProduct = () => {
         // setOriginalPrice(null)
         // setDiscountPrice(null)
         // setStock(null)
-        console.log(res.data.product)
+        // console.log(res.data.product)
     } else {
-        console.log(res.data.message)
+        // console.log(res.data.message)
     }
   };
 

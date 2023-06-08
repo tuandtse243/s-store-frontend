@@ -8,7 +8,7 @@ import ProductCard from "../ProductCard/ProductCard";
 const SuggestedProduct = ({ data }) => {
 //   const {allProducts} = useSelector((state) => state.products);
   const [realtedData, setRelatedData] = useState();
-  console.log(data)
+  // console.log(data)
 
   useEffect(() => {
     const d = productData && productData.filter((i) => i.category === data?.category);

@@ -18,7 +18,7 @@ const AllProducts = () => {
   }, []);
 
   const handleDelete = (key) => {
-    console.log(key)
+    // console.log(key)
   };
 
   const columns = [

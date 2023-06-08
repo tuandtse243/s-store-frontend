@@ -333,7 +333,7 @@ const ShippingInfo = ({
                 className="w-[95%] border h-[40px] rounded-[5px]"
                 value={province}
                 onChange={(e) => {
-                  console.log(e.target.value.split(',')[0])
+                  // console.log(e.target.value.split(',')[0])
                   setProvince(e.target.value)
                   }}
               >
@@ -392,7 +392,7 @@ const ShippingInfo = ({
                 className="w-[95%] border h-[40px] rounded-[5px]"
                 value={typeAddress}
                 onChange={(e) => {
-                  console.log(e.target.value)
+                  // console.log(e.target.value)
                   setTypeAddress(e.target.value)
                   }}
               >

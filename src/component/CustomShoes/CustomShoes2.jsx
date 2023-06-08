@@ -97,7 +97,7 @@ const Model = ({ images, setImages }) => {
 const CustomShoes2 = () => {
   const [images, setImages] = useState([]);
   const router = useRouter();
-  console.log(images)
+  // console.log(images)
 
   useEffect(() => {
     openDatabase()
@@ -113,7 +113,7 @@ const CustomShoes2 = () => {
                 <Model images={images} setImages={setImages}/>
                 <OrbitControls zoomSpeed={0.7} makeDefault dampingFactor={0.2} />
                 <ContactShadows position={[0, -0.8, 0]} color="#ffffff" />
-                <Environment preset="forest" />
+                {/* <Environment preset="forest" /> */}
             </Suspense>
         </Canvas>
         <Row style={{width: '100%'}}>

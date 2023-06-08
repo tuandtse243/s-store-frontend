@@ -5,7 +5,7 @@ import { Button, Form, Modal } from 'antd';
 const SupporterWelcome = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
-    console.log(123)
+    // console.log(123)
     setIsModalOpen(true);
   };
 

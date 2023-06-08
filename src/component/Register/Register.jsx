@@ -33,7 +33,7 @@ const Register = () => {
         }, 
         )
         .then((res) => {
-          console.log(res.data.message)
+          // console.log(res.data.message)
           notification.success({message: 'Login successfully!'});
           // setName("");
           // setUsername("");
@@ -43,7 +43,7 @@ const Register = () => {
           // router.push('/login')
         })
         .catch((error) => {
-            console.log(error.response.data.message)
+            // console.log(error.response.data.message)
             notification.error({message: 'Login fail!'})
         });
     };

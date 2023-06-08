@@ -20,7 +20,7 @@ const ProductDetailsPage = ({ params }) => {
       }).then((res) => setData(res.data.product))
     }, [])
 
-    console.log(data)
+    // console.log(data)
 
   return (
     <div>

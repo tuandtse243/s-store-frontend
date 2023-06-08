@@ -58,7 +58,7 @@ const Payment = () => {
 
     orderData.status = "PROCESSING";
 
-    console.log(orderData)
+    // console.log(orderData)
 
     axios.post(`${server}/order/update-order`, orderData, config)
       .then((res) => {
@@ -66,7 +66,7 @@ const Payment = () => {
         notification.success({message: "Order successful!"});
         // setCart([])
         // localStorage.setItem("latestOrder", JSON.stringify([]));
-        console.log(res.data)
+        // console.log(res.data)
         router.push('/order-success?typeOrder=cashOnDelivery')
       });
   };

@@ -35,7 +35,7 @@ const Checkout = () => {
   const [discountPrice, setDiscountPrice] = useState(0);
 
   const token = useRef();
-  
+
   useEffect(() => {
     window.scrollTo(0, 0);
     token.current = localStorage.getItem("token");
@@ -82,7 +82,7 @@ const Checkout = () => {
         .then((res) => {
           setCart([]);
           localStorage.setItem("latestOrder", JSON.stringify(res.data?.order));
-          console.log(res.data?.order)
+          // console.log(res.data?.order)
           router.push("/payment");
       });
    }
@@ -134,7 +134,7 @@ const Checkout = () => {
     ? (subTotalPrice + shippingFee - discountPercentenge)
     : (subTotalPrice + shippingFee);
 
-  console.log(discountPercentenge);
+  // console.log(discountPercentenge);
 
   return (
     <div className="w-full flex flex-col items-center py-8">
@@ -261,7 +261,7 @@ const ShippingInfo = ({
               className="w-[95%] border h-[40px] rounded-[5px]"
               value={province}
               onChange={(e) => {
-                console.log(e.target.value.split(',')[0])
+                // console.log(e.target.value.split(',')[0])
                 setProvince(e.target.value)
                 }}
             >
@@ -320,7 +320,7 @@ const ShippingInfo = ({
               className="w-[95%] border h-[40px] rounded-[5px]"
               value={typeAddress}
               onChange={(e) => {
-                console.log(e.target.value)
+                // console.log(e.target.value)
                 setTypeAddress(e.target.value)
                 }}
             >
