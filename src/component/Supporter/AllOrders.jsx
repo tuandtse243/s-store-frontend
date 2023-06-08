@@ -11,20 +11,22 @@ import Town from '../../../public/address/xa_phuong.json';
 import { useRouter } from 'next/navigation';
 const { Option } = Select;
 
-const token = useRef();
 
-if (typeof window !== 'undefined') {
-  token.current = localStorage.getItem('token');
-}
-
-const config = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${token.current}`,
-    },
-};
 
 const AllOrders = () => {
+    const token = useRef();
+
+    if (typeof window !== 'undefined') {
+      token.current = localStorage.getItem('token');
+    }
+
+    const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token.current}`,
+        },
+    };
+    
     const user = useAuth((state) => state.auth);
     const [form] = Form.useForm();
     const [orders, setOrders] = useState([]);
