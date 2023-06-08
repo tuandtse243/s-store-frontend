@@ -62,8 +62,10 @@ const CreateProduct = () => {
     newForm.append("supporterId", 123456);
 
     const config = { 
-      headers: { "Content-Type": "multipart/form-data" },
-      Authorization: `${token.current}`,
+      headers: { 
+        "Content-Type": "multipart/form-data",
+        Authorization: `${token.current}`,
+      },
     };
 
     const res = await axios.post(

@@ -45,8 +45,10 @@ const ProfileContent = ({ active }) => {
     formData.append("id", user._id);
 
     const config = { 
-      headers: { "Content-Type": "multipart/form-data" },
-      Authorization: `${token.current}`,
+      headers: { 
+        "Content-Type": "multipart/form-data",
+        Authorization: `${token.current}`,
+      },
     };
 
     await axios
