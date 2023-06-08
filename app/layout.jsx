@@ -14,9 +14,10 @@ export default function RootLayout({ children }) {
   const setAuth = useAuth((state) => state.setAuth)
   const auth = useAuth((state) => state.auth)
   const setIsAuthenticated = useIsAuthenticated((state) => state.setIsAuthenticated)
-  const authCookie = localStorage.getItem('token');
+  
 
   useEffect(() => {
+    const authCookie = localStorage.getItem('token');
     if(authCookie && !auth) {
       axios.get(`${server}/user/getuser`,{withCredentials: true}).then((res) => {
         if(res.data.success) {

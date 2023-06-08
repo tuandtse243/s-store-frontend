@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   AiOutlineArrowRight,
   AiOutlineCamera,
@@ -186,11 +186,16 @@ const AllOrders = () => {
     const router = useRouter();
     const user = useAuth((state) => state.auth);
     const [orders, setOrders] = useState([]);
+    const token = useRef();
+
+    if (typeof window !== 'undefined') {
+      token.current = localStorage.getItem('token');
+    }
 
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `${localStorage.getItem("token")}`,
+        Authorization: `${token.current}`,
       },
     };
 

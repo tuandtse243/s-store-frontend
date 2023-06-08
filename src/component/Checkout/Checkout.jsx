@@ -34,10 +34,10 @@ const Checkout = () => {
   const [couponCodeData, setCouponCodeData] = useState(null);
   const [discountPrice, setDiscountPrice] = useState(0);
 
-
+  const token = useRef()
   useEffect(() => {
     window.scrollTo(0, 0);
-    
+    token.current = localStorage.getItem("token");
   }, []);
 
   const paymentSubmit = async (e) => {
@@ -70,7 +70,7 @@ const Checkout = () => {
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `${localStorage.getItem("token")}`,
+          Authorization: `${token.current}`,
         },
       };
 

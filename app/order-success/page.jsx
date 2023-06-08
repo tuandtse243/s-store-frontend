@@ -15,14 +15,18 @@ const OrderSuccessPage = () => {
   const resultCode = searchParams.get('resultCode');
   const message = searchParams.get('message');
   const orderId = searchParams.get('orderId');
-  console.log(orderId, resultCode, message)
+  const token = '';
+  const order = {}
 
-  const order = JSON.parse(localStorage.getItem("latestOrder"));
+  if (typeof window !== 'undefined') {
+    order = JSON.parse(localStorage.getItem("latestOrder"));
+    token = localStorage.getItem("token");
+  }
 
   const config = {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `${localStorage.getItem("token")}`,
+      Authorization: `${token}`,
     },
   };
 

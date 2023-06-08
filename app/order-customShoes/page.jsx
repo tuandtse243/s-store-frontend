@@ -7,7 +7,7 @@ import Province from '../../public/address/tinh_tp.json'
 import District from '../../public/address/quan_huyen.json';
 import Town from '../../public/address/xa_phuong.json'
 import { Input, Space, Tag, notification } from 'antd';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { server } from '@/server';
 import { useRouter } from 'next/navigation';
@@ -37,9 +37,11 @@ const OrderCustomShoes = () => {
 
     const router = useRouter();
     const user = useAuth((state) => state.auth);
+    const token = useRef();
 
     useEffect(() => {
         openDatabase();
+        token.current = localStorage.getItem("token");
     }, [])
 
     useEffect(() => {
@@ -115,7 +117,7 @@ const OrderCustomShoes = () => {
           const config = {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `${localStorage.getItem("token")}`,
+              Authorization: `${token.current}`,
             },
           };
     

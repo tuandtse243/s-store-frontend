@@ -13,10 +13,15 @@ const AllUsers = () => {
     const [form] = Form.useForm();
     const router = useRouter();
     const user = useRef();
+    const token = useRef();
+
+    if (typeof window !== 'undefined') {
+      token.current = localStorage.getItem('token');
+    }
 
     const config = {
       headers: {
-        Authorization: `${localStorage.getItem("token")}`,
+        Authorization: `${token.current}`,
       },
     };
 

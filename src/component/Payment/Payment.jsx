@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "@/src/styles/styles";
 // import {
 //   CardNumberElement,
@@ -23,12 +23,14 @@ const Payment = () => {
   const user = useAuth((state) => state.auth);
   const setCart = useCart((state) => state.setCart)
   const router = useRouter();
+  const token = useRef();
 
 //   const stripe = useStripe();
 //   const elements = useElements();
 
   useEffect(() => {
     const orderData = JSON.parse(localStorage.getItem("latestOrder"));
+    token.current = localStorage.getItem("token");
     setOrderData(orderData);
   }, []);
 
@@ -45,7 +47,7 @@ const Payment = () => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `${localStorage.getItem("token")}`,
+        Authorization: `${token.current}`,
       },
     };
 

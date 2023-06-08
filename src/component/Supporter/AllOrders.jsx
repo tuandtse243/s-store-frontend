@@ -2,7 +2,7 @@
 import { server } from '@/server';
 import { useAuth } from '@/store/auth';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Loader from '../Loader/Loader';
 import { Button, Form, Input, Modal, Row, Select, Table, Tag, notification } from 'antd';
 import Province from '../../../public/address/tinh_tp.json';
@@ -11,10 +11,16 @@ import Town from '../../../public/address/xa_phuong.json';
 import { useRouter } from 'next/navigation';
 const { Option } = Select;
 
+const token = useRef();
+
+if (typeof window !== 'undefined') {
+  token.current = localStorage.getItem('token');
+}
+
 const config = {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `${localStorage.getItem("token")}`,
+      Authorization: `${token.current}`,
     },
 };
 
