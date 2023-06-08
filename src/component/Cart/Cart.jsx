@@ -5,7 +5,6 @@ import { IoBagHandleOutline } from "react-icons/io5";
 import { HiOutlineMinus, HiPlus } from "react-icons/hi";
 import styles from "@/src/styles/styles";
 
-import { backend_url } from "@/server";
 import Link from "next/link";
 import { useCart } from "@/store/cart";
 import { notification } from "antd";

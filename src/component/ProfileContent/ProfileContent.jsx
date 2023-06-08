@@ -4,7 +4,7 @@ import {
   AiOutlineCamera,
   AiOutlineDelete,
 } from "react-icons/ai";
-import { backend_url, server } from "@/server";
+import { server } from "@/server";
 import styles from "@/src/styles/styles";
 import Link from "next/link";
 import { MdTrackChanges } from "react-icons/md";

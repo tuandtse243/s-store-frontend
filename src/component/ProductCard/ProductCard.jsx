@@ -9,7 +9,6 @@ import {
   AiOutlineStar,
 } from "react-icons/ai";
 
-import { backend_url } from "@/server"; 
 import styles from "@/src/styles/styles";
 // import ProductDetailsCard from "../ProductDetailsCard/ProductDetailsCard";
 // import {
