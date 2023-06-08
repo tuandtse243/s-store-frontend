@@ -26,24 +26,28 @@ const ProfileContent = ({ active }) => {
   const [phone, setPhone] = useState(user && user.phone);
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(user?.avatar);
+  const token = useRef();
 
+  if (typeof window !== 'undefined') {
+    token.current = localStorage.getItem("token");
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // dispatch(updateUserInformation(name, email, phoneNumber, password));
   };
 
   const handleImage = async (e) => {
     const file = e.target.files[0];
-    // console.log(file)
-    // setAvatar(file);
 
     const formData = new FormData();
 
     formData.append("image", file);
     formData.append("id", user._id);
 
-    const config = { headers: { "Content-Type": "multipart/form-data" } };
+    const config = { 
+      headers: { "Content-Type": "multipart/form-data" },
+      Authorization: `${token.current}`,
+    };
 
     await axios
       .post(`${server}/user/update-avatar`, formData, config)

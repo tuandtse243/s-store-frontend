@@ -24,6 +24,11 @@ const CreateProduct = () => {
   const [originalPrice, setOriginalPrice] = useState();
   const [discountPrice, setDiscountPrice] = useState();
   const [stock, setStock] = useState();
+  const token = useRef();
+
+  if (typeof window !== 'undefined') {
+    token.current = localStorage.getItem('token');
+  }
 
   const handleImageChange = (e) => {
     e.preventDefault();
@@ -56,7 +61,10 @@ const CreateProduct = () => {
     newForm.append("stock", stock);
     newForm.append("supporterId", 123456);
 
-    const config = { headers: { "Content-Type": "multipart/form-data" } };
+    const config = { 
+      headers: { "Content-Type": "multipart/form-data" },
+      Authorization: `${token.current}`,
+    };
 
     const res = await axios.post(
         `${server}/product/create-product`,
