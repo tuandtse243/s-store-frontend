@@ -14,15 +14,15 @@ const AllUsers = () => {
     const router = useRouter();
     const user = useRef();
 
-    useEffect(() => {
-        axios.get(`${server}/user/get-all-users`).then((res) => setUsers(res?.data?.users));
-    }, [])
-
     const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
     };
+
+    useEffect(() => {
+        axios.get(`${server}/user/get-all-users`, config).then((res) => setUsers(res?.data?.users));
+    }, [])
 
     const editHandler = (userForm) => {
         setIsModalOpen(true);

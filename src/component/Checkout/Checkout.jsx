@@ -16,6 +16,7 @@ const Checkout = () => {
 
   const user = useAuth((state) => state.auth);
   const cart = useCart((state) => state.cart);
+  const setCart = useCart((state) => state.setCart);
 
   const [userInfo, setUserInfo] = useState(false);
 
@@ -69,6 +70,7 @@ const Checkout = () => {
       const config = {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `${localStorage.getItem("token")}`,
         },
       };
 
@@ -77,10 +79,10 @@ const Checkout = () => {
       await axios
         .post(`${server}/order/create-order`, orderData, config)
         .then((res) => {
-
-        localStorage.setItem("latestOrder", JSON.stringify(res.data?.order));
-        console.log(res.data?.order)
-        router.push("/payment");
+          setCart([]);
+          localStorage.setItem("latestOrder", JSON.stringify(res.data?.order));
+          console.log(res.data?.order)
+          router.push("/payment");
       });
    }
   };
@@ -376,12 +378,12 @@ const CartData = ({
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Tổng tiền:</h3>
-        <h5 className="text-[18px] font-[600]">{subTotalPrice} VNĐ</h5>
+        <h5 className="text-[18px] font-[600]">{Math.ceil(subTotalPrice)} VNĐ</h5>
       </div>
       <br />
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Tiền vận chuyển:</h3>
-        <h5 className="text-[18px] font-[600]">{shipping} VNĐ</h5>
+        <h5 className="text-[18px] font-[600]">{Math.ceil(shipping)} VNĐ</h5>
       </div>
       <br />
       <div className="flex justify-between border-b pb-3">
@@ -390,7 +392,7 @@ const CartData = ({
           - {discountPercentenge ? "$" + discountPercentenge.toString() : null}
         </h5>
       </div>
-      <h5 className="text-[18px] font-[600] text-end pt-3">{totalPrice} VNĐ</h5>
+      <h5 className="text-[18px] font-[600] text-end pt-3">{Math.ceil(totalPrice)} VNĐ</h5>
       <br />
       <form onSubmit={handleSubmit}>
         <input

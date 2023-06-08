@@ -8,7 +8,7 @@ const CustomShoesPage = () => {
   
   return (
     <div>
-        <Header />
+        <Header activeHeading={4}/>
         <CustomShoes2 />
         <Footer/>
     </div>

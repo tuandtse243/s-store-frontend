@@ -185,10 +185,17 @@ const ProfileContent = ({ active }) => {
 const AllOrders = () => {
     const router = useRouter();
     const user = useAuth((state) => state.auth);
-    const [orders, setOrders] = useState([])
+    const [orders, setOrders] = useState([]);
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${localStorage.getItem("token")}`,
+      },
+    };
 
   useEffect(() => {
-    axios.get(`${server}/order/get-all-orders/${user._id}`)
+    axios.get(`${server}/order/get-all-orders/${user._id}`, config)
     .then((res) => setOrders(res.data?.orders))
   }, []);
 
@@ -198,11 +205,7 @@ const AllOrders = () => {
     router.push('/payment')
   }
 
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
+  
   // Hủy
   const onCancel = (order) => {
     order.status = 'CANCEL';

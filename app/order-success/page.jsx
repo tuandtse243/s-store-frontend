@@ -22,6 +22,7 @@ const OrderSuccessPage = () => {
   const config = {
     headers: {
       "Content-Type": "application/json",
+      Authorization: `${localStorage.getItem("token")}`,
     },
   };
 

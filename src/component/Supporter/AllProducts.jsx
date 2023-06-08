@@ -11,13 +11,8 @@ import Loader from "../Loader/Loader";
 const AllProducts = () => {
     const [data, setData] = useState(false)
 
-
   useEffect(() => {
-    axios.get(`${server}/product/get-all-products`, {
-      headers: {
-        Authorization: `${localStorage.getItem("token")}`,
-      },
-    })
+    axios.get(`${server}/product/get-all-products`)
     .then((res) => setData(res?.data?.products))
     .catch((err) => notification.error({message: err?.response?.data?.message}));
   }, []);

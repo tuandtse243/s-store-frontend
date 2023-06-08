@@ -14,6 +14,7 @@ const { Option } = Select;
 const config = {
     headers: {
       "Content-Type": "application/json",
+      Authorization: `${localStorage.getItem("token")}`,
     },
 };
 
@@ -26,7 +27,7 @@ const AllOrders = () => {
     const router = useRouter();
 
   useEffect(() => {
-    axios.get(`${server}/order/admin-all-orders`)
+    axios.get(`${server}/order/admin-all-orders`, config)
     .then((res) => setOrders(res.data?.orders))
   }, []);
 
@@ -46,13 +47,13 @@ const AllOrders = () => {
     order.status = values.status;
 
     axios.post(`${server}/order/update-order`, order, config)
-        .then((res) => {
-            if(res.data.success) {
-                notification.success({message: 'Cập nhật đơn hàng thành công'});
-                setIsModalOpen(false);
-                router.refresh();
-            }
-        })
+      .then((res) => {
+          if(res.data.success) {
+              notification.success({message: 'Cập nhật đơn hàng thành công'});
+              setIsModalOpen(false);
+              router.refresh();
+          }
+      })
   };
 
   const handleCancel = () => {

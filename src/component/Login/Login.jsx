@@ -39,6 +39,7 @@ const Login = () => {
         notification.success({message: "Login successfully!"});
         setAuth(res.data.user);
         setIsAuthenticated(true);
+        localStorage.setItem("token", res.data.token);
         if(res.data.user.role === "supporter") {
           router.push('/supporter');
         } else {

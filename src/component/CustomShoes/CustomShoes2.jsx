@@ -4,9 +4,10 @@ import { useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { ContactShadows, Environment, OrbitControls, useGLTF } from '@react-three/drei'
 import { button, folder, useControls } from 'leva'
-import { Row } from 'antd'
+import { Button, Row } from 'antd'
 import { useRouter } from 'next/navigation'
 import { Color } from 'three'
+import { openDatabase, saveData } from '@/helpers/ConnectIndexedDB/SaveInIndexedDB';
 
 const Model = ({ images, setImages }) => {
     const router = useRouter();
@@ -25,6 +26,13 @@ const Model = ({ images, setImages }) => {
          button(() => {
           const link = document.createElement('a')
           const image = gl.domElement.toDataURL('image/png').split(',')[1];
+
+          const request = window.indexedDB.open('myDatabase', 1);
+          request.onsuccess = (event) => {
+            const db = event.target.result;
+            saveData(db, image);
+          };
+
           images.push(image)
           setImages(images)
           link.click()
@@ -86,7 +94,13 @@ const Model = ({ images, setImages }) => {
 }
 
 const CustomShoes2 = () => {
-  const [images, setImages] = useState([])
+  const [images, setImages] = useState([]);
+  const router = useRouter();
+  console.log(images)
+
+  useEffect(() => {
+    openDatabase()
+  }, [])
 
   return (
     <div>
@@ -106,6 +120,7 @@ const CustomShoes2 = () => {
             images.map((image) => <img src={`data:image/jpeg;base64,${image}`} height={400} width={400} style={{border: '1px solid black', marginLeft: '5px', marginBottom: '5px'}}/>)
           }
         </Row>
+        {images.length === 3 && <Button onClick={() => router.push('/order-customShoes')} style={{margin: '20px 0px'}}>Đặt hàng</Button>}
     </div>
   )
 }

@@ -22,6 +22,7 @@ const OrderSuccess = () => {
           <br />
           {/* <Lottie options={defaultOptions} width={300} height={300} /> */}
           <h5 className="text-center mb-5 text-[25px] text-[#000000a1]">
+            <h1 className='text-[#de1919a1] font-bold'>Đặt hàng thành công</h1>
             Cảm ơn bạn đã tin tưởng chúng tôi 😍
           </h5>
           <div className='flex justify-center'>

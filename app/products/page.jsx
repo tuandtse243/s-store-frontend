@@ -8,18 +8,16 @@ import ProductCard from "@/src/component/ProductCard/ProductCard";
 import styles from "@/src/styles/styles";
 import { productData } from "@/src/static/data";
 import { useAuth, useIsAuthenticated } from "@/store/auth";
+import axios from "axios";
+import { server } from "@/server";
 
 
 const ProductsPage = () => {
-//   const {allProducts,isLoading} = useSelector((state) => state.products);
   const [data, setData] = useState(productData);
 
-  // const isAuthenticated = useIsAuthenticated((state) => state.isAuthenticated);
-  // const auth = useAuth((state) => state.auth);
-
   useEffect(() => {
-    // const d = productData && productData.sort((a, b) => a.price - b.price)
-    // setData(d)
+    axios.get(`${server}/product/get-all-products`)
+    .then((res) => setData(res.data.products));
   }, [])
 
   return (

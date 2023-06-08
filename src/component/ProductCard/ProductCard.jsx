@@ -76,7 +76,7 @@ const ProductCard = ({ data }) => {
             </div>
 
             <div className="py-2 flex items-center justify-between">
-                <div className="">
+                <div className="order-2">
                     <h4 className={`${styles.price}`}>
                         {data.originalPrice ? data.originalPrice + ' đ' : null}
                     </h4>

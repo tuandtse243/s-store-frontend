@@ -9,9 +9,11 @@ import { backend_url } from "@/server";
 import Link from "next/link";
 import { useCart } from "@/store/cart";
 import { notification } from "antd";
+import { useAuth, useIsAuthenticated } from "@/store/auth";
 
 const Cart = ({ setOpenCart }) => {
   const cart = useCart((state) => state.cart);
+  const isAuthenticated = useIsAuthenticated((state) => state.isAuthenticated);
 
   const totalPrice = cart.reduce(
     (acc, item) => acc + item.qty * item.discountPrice,
@@ -62,7 +64,8 @@ const Cart = ({ setOpenCart }) => {
 
             <div className="px-5 mb-3">
               {/* checkout buttons */}
-              <Link href="/checkout">
+              <Link href={isAuthenticated ? "/checkout" : "/login"}>
+              {/* <Link href="/checkout"> */}
                 <div
                   className={`h-[45px] flex items-center justify-center w-[100%] bg-[#e44343] rounded-[5px]`}
                 >

@@ -2,12 +2,10 @@
 import React, { useEffect, useState } from "react";
 import styles from "@/src/styles/styles";
 import ProductCard from "../ProductCard/ProductCard";
-import { productData } from "@/src/static/data";
 import axios from "axios";
 import { server } from "@/server";
 
 const FeaturedProduct = () => {
-    const allProducts = productData;
     const [products, setProducts] = useState([])
 
     useEffect(() => {
@@ -21,7 +19,7 @@ const FeaturedProduct = () => {
     <div>
       <div className={`${styles.section}`}>
         <div className={`${styles.heading}`}>
-          <h1>Featured Products</h1>
+          <h1>Sản Phẩm</h1>
         </div>
         <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl:gap-[30px] mb-12 border-0">
           {
