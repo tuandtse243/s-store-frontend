@@ -3,7 +3,7 @@ import CheckoutSteps from '@/src/component/Checkout/CheckoutSteps'
 import Footer from '@/src/component/Footer/Footer'
 import Header from '@/src/component/Header/Header'
 import OrderSuccess from '@/src/component/OrderSuccess/OrderSuccess'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSearchParams } from 'next/navigation';
 import OrderFail from '@/src/component/OrderFail/OrderFail'
 import axios from 'axios'
@@ -15,18 +15,18 @@ const OrderSuccessPage = () => {
   const resultCode = searchParams.get('resultCode');
   const message = searchParams.get('message');
   const orderId = searchParams.get('orderId');
-  const token = '';
-  const order = {}
+  const token = useRef();
+  let order = {};
 
   if (typeof window !== 'undefined') {
     order = JSON.parse(localStorage.getItem("latestOrder"));
-    token = localStorage.getItem("token");
+    token.current = localStorage.getItem("token");
   }
 
   const config = {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `${token}`,
+      Authorization: `${token.current}`,
     },
   };
 
@@ -51,7 +51,6 @@ const OrderSuccessPage = () => {
 
 
   useEffect(() => {
-    // console.log(order);
     if(typeOrder === 'cashOnDelivery') return;
     axios.post(`${server}/order/update-order`, order, config);
   }, [])
