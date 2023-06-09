@@ -43,8 +43,7 @@ const Register = () => {
           // router.push('/login')
         })
         .catch((error) => {
-            // console.log(error.response.data.message)
-            notification.error({message: 'Login fail!'})
+            notification.error({message: error.response?.data?.message})
         });
     };
   
