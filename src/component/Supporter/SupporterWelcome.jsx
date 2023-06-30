@@ -1,29 +1,14 @@
 'use client'
 import React, { useState } from 'react'
-import { Button, Form, Modal } from 'antd';
+import styles from './SupporterWelcome.module.scss'
 
 const SupporterWelcome = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    // console.log(123)
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
   return (
-    <div>
-      <Button type="primary" onClick={showModal} className='bg-[#1677ff]'>Cập nhật</Button>
-      <Modal title="Basic Modal" footer={null} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <Form>
-
-        </Form>
-      </Modal>
+    <div className={styles.welcomeContainer}>
+      <div className={styles.birdsContainer}>
+        <image src="https://clipart-library.com/img1/1663317.gif" height="100px" draggable="false"/>
+      </div>
+      <div className={styles.welcome}>Welcome Admin!</div>
     </div>
   )
 }

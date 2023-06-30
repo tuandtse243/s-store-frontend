@@ -110,7 +110,7 @@ const SupporterSideBar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link href="/supporter/messages" className="w-full flex items-center">
+        <Link href="/supporter" className="w-full flex items-center">
           <BiMessageSquareDetail
             size={30}
             color={`${active === 6 ? "crimson" : "#555"}`}
@@ -126,7 +126,7 @@ const SupporterSideBar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link href="/supporter/coupouns" className="w-full flex items-center">
+        <Link href="/supporter" className="w-full flex items-center">
           <AiOutlineGift
             size={30}
             color={`${active === 7 ? "crimson" : "#555"}`}
@@ -142,7 +142,7 @@ const SupporterSideBar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link href="/supporter/refunds" className="w-full flex items-center">
+        <Link href="/supporter" className="w-full flex items-center">
           <HiOutlineReceiptRefund
             size={30}
             color={`${active === 8 ? "crimson" : "#555"}`}
@@ -158,7 +158,7 @@ const SupporterSideBar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link href="/" className="w-full flex items-center">
+        <Link href="/supporter" className="w-full flex items-center">
           <CiSettings
             size={30}
             color={`${active === 9 ? "crimson" : "#555"}`}

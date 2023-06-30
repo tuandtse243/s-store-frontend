@@ -6,7 +6,6 @@ import Welcome from "@/src/component/Welcome/Welcome";
 import Categories from "@/src/component/Categories/Categories";
 import BestDeals from "@/src/component/BestDeals/BestDeals";
 import FeaturedProduct from "@/src/component/FeatureProduct/FeatureProduct";
-import Sponsored from "@/src/component/Sponsored/Sponsored";
 
 
 const Home = () => {
@@ -18,7 +17,6 @@ const Home = () => {
       <Categories />
       <BestDeals />
       <FeaturedProduct />
-      <Sponsored />
       <Footer />
     </div>
   )

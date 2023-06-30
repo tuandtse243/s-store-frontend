@@ -27,24 +27,24 @@ const SupporterHeader = () => {
               className="mx-5 cursor-pointer"
             />
           </Link>
-          <Link href="/supporter/events" className="800px:block hidden">
+          <Link href="/supporter" className="800px:block hidden">
             <MdOutlineLocalOffer
               color="#555"
               size={30}
               className="mx-5 cursor-pointer"
             />
           </Link>
-          <Link href="/supporter/products" className="800px:block hidden">
+          <Link href="/supporter" className="800px:block hidden">
             <FiShoppingBag
               color="#555"
               size={30}
               className="mx-5 cursor-pointer"
             />
           </Link>
-          <Link href="/supporter/orders" className="800px:block hidden">
+          <Link href="/supporter" className="800px:block hidden">
             <FiPackage color="#555" size={30} className="mx-5 cursor-pointer" />
           </Link>
-          <Link href="/supporter/messages" className="800px:block hidden">
+          <Link href="/supporter" className="800px:block hidden">
             <BiMessageSquareDetail
               color="#555"
               size={30}

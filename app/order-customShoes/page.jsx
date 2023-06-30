@@ -138,7 +138,7 @@ const OrderCustomShoes = () => {
                       deleteObjectStore(db, objectStoreToDelete);
                   };
                 }
-                router.push("/payment");
+                router.push("/payment?typeBooking=custom");
           });
        }
     };

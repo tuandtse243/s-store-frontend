@@ -11,22 +11,21 @@ import styles from "@/src/styles/styles";
 // import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { server } from "@/server"; 
-import { RxCross1 } from "react-icons/rx";
 import { notification } from "antd";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/store/auth";
 import { useCart } from "@/store/cart";
 
 const Payment = () => {
+  const searchParams = useSearchParams();
+  const typeBooking = searchParams.get('typeBooking');
+
   const [orderData, setOrderData] = useState([]);
   const [open, setOpen] = useState(false);
   const user = useAuth((state) => state.auth);
   const setCart = useCart((state) => state.setCart)
   const router = useRouter();
   const token = useRef();
-
-//   const stripe = useStripe();
-//   const elements = useElements();
 
   useEffect(() => {
     const orderData = JSON.parse(localStorage.getItem("latestOrder"));
@@ -101,6 +100,7 @@ const Payment = () => {
             user={user}
             cashOnDeliveryHandler={cashOnDeliveryHandler}
             momoHandler={momoHandler}
+            typeBooking={typeBooking}
           />
         </div>
         <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
@@ -115,6 +115,7 @@ const PaymentInfo = ({
   user,
   cashOnDeliveryHandler,
   momoHandler,
+  typeBooking
 }) => {
   const [select, setSelect] = useState(1);
 
@@ -155,34 +156,37 @@ const PaymentInfo = ({
 
       <br />
       {/* cash on delivery */}
-      <div>
-        <div className="flex w-full pb-5 border-b mb-2">
-          <div
-            className="w-[25px] h-[25px] rounded-full bg-transparent border-[3px] border-[#1d1a1ab4] relative flex items-center justify-center"
-            onClick={() => setSelect(3)}
-          >
-            {select === 3 ? (
-              <div className="w-[13px] h-[13px] bg-[#1d1a1acb] rounded-full" />
-            ) : null}
+      {
+        typeBooking === 'custom' ? '' : 
+        <div>
+          <div className="flex w-full pb-5 border-b mb-2">
+            <div
+              className="w-[25px] h-[25px] rounded-full bg-transparent border-[3px] border-[#1d1a1ab4] relative flex items-center justify-center"
+              onClick={() => setSelect(3)}
+            >
+              {select === 3 ? (
+                <div className="w-[13px] h-[13px] bg-[#1d1a1acb] rounded-full" />
+              ) : null}
+            </div>
+            <h4 className="text-[18px] pl-2 font-[600] text-[#000000b1]">
+              Thanh toán khi giao hàng
+            </h4>
           </div>
-          <h4 className="text-[18px] pl-2 font-[600] text-[#000000b1]">
-            Thanh toán khi giao hàng
-          </h4>
-        </div>
 
-        {/* cash on delivery */}
-        {select === 3 ? (
-          <div className="w-full flex">
-            <form className="w-full" onSubmit={cashOnDeliveryHandler}>
-              <input
-                type="submit"
-                value="Xác nhận"
-                className={`${styles.button} !bg-[#f63b60] text-[#fff] h-[45px] rounded-[5px] cursor-pointer text-[18px] font-[600]`}
-              />
-            </form>
-          </div>
-        ) : null}
-      </div>
+          {/* cash on delivery */}
+          {select === 3 ? (
+            <div className="w-full flex">
+              <form className="w-full" onSubmit={cashOnDeliveryHandler}>
+                <input
+                  type="submit"
+                  value="Xác nhận"
+                  className={`${styles.button} !bg-[#f63b60] text-[#fff] h-[45px] rounded-[5px] cursor-pointer text-[18px] font-[600]`}
+                />
+              </form>
+            </div>
+          ) : null}
+        </div>
+      }
     </div>
   );
 };
@@ -193,7 +197,7 @@ const CartData = ({ orderData }) => {
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Tổng tiền:</h3>
-        <h5 className="text-[18px] font-[600]">{Math.ceil(orderData?.totalPrice + orderData?.discountPrice)} VNĐ</h5>
+        <h5 className="text-[18px] font-[600]">{Math.ceil(orderData?.totalPrice)} VNĐ</h5>
       </div>
       <br />
       <div className="flex justify-between">

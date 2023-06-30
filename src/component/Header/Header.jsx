@@ -1,6 +1,5 @@
 "use client"
 
-
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import styles from '@/src/styles/styles';
@@ -36,14 +35,14 @@ const Header = ({ activeHeading }) => {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
-      setSearchTerm('');
-      window.addEventListener("scroll", () => {
-        if (window.scrollY > 70) {
-          setActive(true);
-        } else {
-          setActive(false);
-        }
-      });
+      // setSearchTerm('');
+      // window.addEventListener("scroll", () => {
+      //   if (window.scrollY > 70) {
+      //     setActive(true);
+      //   } else {
+      //     setActive(false);
+      //   }
+      // });
     }, [])
 
     const handleSearchChange = (e) => {
@@ -125,7 +124,7 @@ const Header = ({ activeHeading }) => {
       <div
         className={`${
           active === true ? `shadow-sm fixed top-0 left-0 z-10` : null
-        } transition hidden 800px:flex items-center justify-between w-full bg-[#3321c8] h-[70px]`}
+        } transition hidden 800px:flex items-center justify-between w-full bg-[#6e68a0] h-[70px]`}
       >
         <div
           className={`${styles.section} relative ${styles.noramlFlex} justify-between`}
@@ -339,7 +338,7 @@ const Header = ({ activeHeading }) => {
                       href="/login"
                       className="text-[18px] pr-[10px] text-[#000000b7]"
                     >
-                      Login /
+                      Login
                     </Link>
                     <Link
                       href="/sign-up"

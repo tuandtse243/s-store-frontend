@@ -36,11 +36,7 @@ const AllUsers = () => {
     }
 
     const deleteHandler = (user) => {
-        axios.delete(`${server}/user/delete-user`, {
-            params: {
-                id: user._id
-            }
-        } , config).then((res) => {
+        axios.delete(`${server}/user/delete-user`, { data: user._id }, config).then((res) => {
             if(res.data.success) {
                 notification.success({message: 'Xóa người dùng thành công'});
                 router.refresh();

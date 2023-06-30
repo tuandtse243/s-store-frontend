@@ -21,7 +21,7 @@ export const useIsAuthenticated = create(
     setIsAuthenticated: (newIsAuthenticated) => set({isAuthenticated: newIsAuthenticated})
     }),
     {
-        name: "isAuthenticated",
+      name: "isAuthenticated",
     }
   )
 )

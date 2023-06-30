@@ -1,12 +1,13 @@
 "use client"
 
 import '../styles/globals.scss'
-import { useAuth, useIsAuthenticated } from '@/store/auth'
+
 import { useEffect } from 'react'
-import { server } from '@/server'
 import axios from 'axios'
 import { notification } from "antd";
 import { useRouter } from 'next/navigation'
+import { useAuth, useIsAuthenticated } from '@/store/auth'
+import { server } from '@/server';
 
 export default function RootLayout({ children }) {
   const router = useRouter();

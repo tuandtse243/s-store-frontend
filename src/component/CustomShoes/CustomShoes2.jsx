@@ -7,7 +7,7 @@ import { button, folder, useControls } from 'leva'
 import { Button, Row } from 'antd'
 import { useRouter } from 'next/navigation'
 import { Color } from 'three'
-import { openDatabase, saveData } from '@/helpers/ConnectIndexedDB/SaveInIndexedDB';
+import { deleteObjectStore, openDatabase, saveData } from '@/helpers/ConnectIndexedDB/SaveInIndexedDB';
 
 const Model = ({ images, setImages }) => {
     const router = useRouter();
@@ -100,7 +100,17 @@ const CustomShoes2 = () => {
   // console.log(images)
 
   useEffect(() => {
-    openDatabase()
+    if (typeof window !== "undefined") {
+      // Client-side-only code
+      const request = window.indexedDB.open('myDatabase', 1);
+      request.onsuccess = (event) => {
+          const db = event.target.result;
+          // Call deleteObjectStore function with the desired object store name
+          const objectStoreToDelete = 'ImageStore';
+          deleteObjectStore(db, objectStoreToDelete);
+      };
+    }
+    openDatabase();
   }, [])
 
   return (
