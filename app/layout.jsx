@@ -30,6 +30,9 @@ export default function RootLayout({ children }) {
         notification.error({message: err.response?.data?.message})
       })
     }
+    if(auth) {
+      auth.role === 'supporter' && router.push('/supporter')
+    }
   }, [])
 
   return (

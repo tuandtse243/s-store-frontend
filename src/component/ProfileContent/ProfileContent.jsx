@@ -517,7 +517,7 @@ const TrackOrder = () => {
 //   const { orders } = useSelector((state) => state.order);
 
   useEffect(() => {
-    dispatch(getAllOrdersOfUser(user._id));
+    // dispatch(getAllOrdersOfUser(user._id));
   }, []);
 
   const columns = [
@@ -701,15 +701,15 @@ const Address = () => {
     if (addressType === "" || country === "" || city === "") {
       toast.error("Please fill all the fields!");
     } else {
-      dispatch(
-        updatUserAddress(
-          country,
-          city,
-          address1,
-          address2,
-          addressType
-        )
-      );
+      // dispatch(
+      //   updatUserAddress(
+      //     country,
+      //     city,
+      //     address1,
+      //     address2,
+      //     addressType
+      //   )
+      // );
       setOpen(false);
       setCountry("");
       setCity("");
@@ -721,7 +721,7 @@ const Address = () => {
 
   const handleDelete = (item) => {
     const id = item._id;
-    dispatch(deleteUserAddress(id));
+    // dispatch(deleteUserAddress(id));
   };
 
   return (

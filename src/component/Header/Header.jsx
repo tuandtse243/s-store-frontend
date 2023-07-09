@@ -49,7 +49,8 @@ const Header = ({ activeHeading }) => {
       const term = e?.target?.value;
       
       if(term === '') {
-        setSearchData([]);
+        setSearchData(null);
+        setSearchTerm('');
         return;
       }
       
@@ -79,7 +80,7 @@ const Header = ({ activeHeading }) => {
           <div className="w-[50%] relative">
             <input
               type="text"
-              placeholder="Search Product..."
+              placeholder="Tìm kiếm sản phẩm..."
               value={searchTerm}
               onChange={(e) => handleSearchChange(e)}
               className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
@@ -93,7 +94,7 @@ const Header = ({ activeHeading }) => {
                 {searchData &&
                   searchData.map((i, index) => {
                     return (
-                      <Link href={`/product/${i._id}`}>
+                      <Link href={'#'}>
                         <div className="w-full flex items-start-py-3">
                           <img
                             src={i.image_Url[0].url}

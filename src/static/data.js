@@ -26,8 +26,8 @@ export const navItems = [
   export const brandingData = [
     {
       id: 1,
-      title: "Free Shipping",
-      Description: "From all orders over 100$",
+      title: "Miễn phí vận chuyển",
+      Description: "Từ tất cả các đơn hàng trên 1.000.000đ",
       icon: (
         <svg
           width="36"
@@ -76,8 +76,8 @@ export const navItems = [
     },
     {
       id: 2,
-      title: "Daily Surprise Offers",
-      Description: "Save up to 25% off",
+      title: "Ưu đãi bất ngờ hàng ngày",
+      Description: "Tiết kiệm tới 25%",
       icon: (
         <svg
           width="32"
@@ -104,8 +104,8 @@ export const navItems = [
     },
     {
       id: 4,
-      title: "Affortable Prices",
-      Description: "Get Factory direct price",
+      title: "Giá cả phải chăng",
+      Description: "Nhận giá trực tiếp từ nhà máy",
       icon: (
         <svg
           width="32"
@@ -151,8 +151,8 @@ export const navItems = [
     },
     {
       id: 5,
-      title: "Secure Payments",
-      Description: "100% protected payments",
+      title: "Thanh toán an toàn",
+      Description: "Thanh toán được bảo vệ 100%",
       icon: (
         <svg
           width="32"
@@ -236,6 +236,24 @@ export const navItems = [
       title: "Biti'sHunter",
       subTitle: "",
       image_Url: "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Logo-BitisHunter.png",
+    },
+    {
+      id: 8,
+      title: "Reeook",
+      subTitle: "",
+      image_Url: "https://1000logos.net/wp-content/uploads/2017/05/Reebok-logo.png",
+    },
+    {
+      id: 9,
+      title: "Fila",
+      subTitle: "",
+      image_Url: "https://1000logos.net/wp-content/uploads/2018/12/Fila.jpg",
+    },
+    {
+      id: 10,
+      title: "Mizuno",
+      subTitle: "",
+      image_Url: "https://static1.squarespace.com/static/601db49adacf4b64ff2a0777/601ea3a5f9c06721da24b32b/60233c921d667a3577bef718/1612922041287/Mizuno.png",
     },
   ];
   

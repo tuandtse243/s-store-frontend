@@ -30,7 +30,7 @@ const Welcome = () => {
         <Link href="/products" className="inline-block">
             <div className={`${styles.button} mt-5 bg-white`}>
                  <span className="text-[#000] font-[Poppins] text-[18px]">
-                    Shop Now
+                    Mua ngay
                  </span>
             </div>
         </Link>

@@ -14,12 +14,12 @@ const Wishlist = ({ setOpenWishlist }) => {
     // const dispatch = useDispatch();
   
     const removeFromWishlistHandler = (data) => {
-      dispatch(removeFromWishlist(data));
+      // dispatch(removeFromWishlist(data));
     };
   
     const addToCartHandler = (data) => {
       const newData = {...data, qty:1};
-      dispatch(addTocart(newData));
+      // dispatch(addTocart(newData));
       setOpenWishlist(false);
     }
 

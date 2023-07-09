@@ -34,13 +34,13 @@ const Register = () => {
         )
         .then((res) => {
           // console.log(res.data.message)
-          notification.success({message: 'Login successfully!'});
-          // setName("");
-          // setUsername("");
-          // setPassword("");
-          // setPhone("");
-          // setEmail("");
-          // router.push('/login')
+          notification.success({message: 'Vui lòng check email để kích hoạt tài khoản!'});
+          setName("");
+          setUsername("");
+          setPassword("");
+          setPhone("");
+          setEmail("");
+          router.push('/login')
         })
         .catch((error) => {
             notification.error({message: error.response?.data?.message})
@@ -51,7 +51,7 @@ const Register = () => {
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Register as a new user
+          Đăng ký người dùng mới
           </h2>
         </div>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -62,7 +62,7 @@ const Register = () => {
                   htmlFor="name"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Full Name
+                  Họ và tên
                 </label>
                 <div className="mt-1">
                   <input
@@ -82,7 +82,7 @@ const Register = () => {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Username
+                  Tên đăng nhập
                 </label>
                 <div className="mt-1">
                   <input
@@ -102,7 +102,7 @@ const Register = () => {
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Password
+                  Mật khẩu
                 </label>
                 <div className="mt-1 relative">
                   <input
@@ -135,7 +135,7 @@ const Register = () => {
                   htmlFor="phone"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Phone
+                  Số điện thoại
                 </label>
                 <div className="mt-1">
                   <input
@@ -155,7 +155,7 @@ const Register = () => {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Email
+                  Email <span style={{ fontSize: '12px', color: 'gray' }}>(Chính chủ để Kích hoạt tài khoản)</span>
                 </label>
                 <div className="mt-1">
                   <input
@@ -175,13 +175,13 @@ const Register = () => {
                   type="submit"
                   className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
                 >
-                  Submit
+                  Đăng ký
                 </button>
               </div>
               <div className={`${styles.noramlFlex} w-full`}>
-                <h4>Already have an account?</h4>
+                <h4>Bạn đã có tài khoản?</h4>
                 <Link href="/login" className="text-blue-600 pl-2">
-                  Sign In
+                  Đăng nhập
                 </Link>
               </div>
             </form>
