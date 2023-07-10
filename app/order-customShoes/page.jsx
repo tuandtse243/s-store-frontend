@@ -11,7 +11,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { server } from '@/server';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/store/auth';
+import { useAuth, useIsAuthenticated } from '@/store/auth';
 import axios from 'axios';
 const { CheckableTag } = Tag;
 
@@ -37,6 +37,7 @@ const OrderCustomShoes = () => {
 
     const router = useRouter();
     const user = useAuth((state) => state.auth);
+    const isAuthenticated = useIsAuthenticated((state) => state.isAuthenticated);
     const token = useRef();
 
     useEffect(() => {
@@ -78,69 +79,74 @@ const OrderCustomShoes = () => {
 
     const paymentSubmit = async (e) => {
         e.preventDefault();
-       if(province === "" || district === "" || town === "" || street === "" || houseNumber === "" || name === "" || phone === "" || email === "" || typeAddress === "" || selectedTags.length === 0){
-          notification.error({message: "Vui lòng nhập đầy đủ thông tin nhận hàng!"})
-       } else {
-          const shippingAddress = {
-              name,
-              phone,
-              email,
-              province: province.split(',')[1],
-              district: district.split(',')[1],
-              town,
-              street,
-              houseNumber,
-              typeAddress
-          };
-
-          const cart = [{
-            nameShoes: nameShoes,
-            quantity: count,
-            unitPrice: 1500000,
-            size: selectedTags[0],
-            category: 'custom-shoes',
-          }]
-
-          const totalPrice = 1500000 * count;
-          const shippingFee = totalPrice * 0.1;
-          const discountPrice = 0;
-    
-          const orderData = {
-            cart,
-            shippingAddress,
-            user,
-            totalPrice,
-            shippingFee,
-            discountPrice,
-          };
-    
-          const config = {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `${token.current}`,
-            },
-          };
-    
-          orderData.status = "WAITING PAYMENT"
-        //   console.log(orderData)
-    
-          await axios
-            .post(`${server}/order/create-order`, orderData, config)
-            .then((res) => {
-                localStorage.setItem("latestOrder", JSON.stringify(res.data?.order));
-                if (typeof window !== "undefined") {
-                  // Client-side-only code
-                  const request = window.indexedDB.open('myDatabase', 1);
-                  request.onsuccess = (event) => {
-                      const db = event.target.result;
-                      // Call deleteObjectStore function with the desired object store name
-                      const objectStoreToDelete = 'ImageStore';
-                      deleteObjectStore(db, objectStoreToDelete);
-                  };
-                }
-                router.push("/payment?typeBooking=custom");
-          });
-       }
+        if(isAuthenticated) {
+          if(province === "" || district === "" || town === "" || street === "" || houseNumber === "" || name === "" || phone === "" || email === "" || typeAddress === "" || selectedTags.length === 0){
+             notification.error({message: "Vui lòng nhập đầy đủ thông tin nhận hàng!"})
+          } else {
+             const shippingAddress = {
+                 name,
+                 phone,
+                 email,
+                 province: province.split(',')[1],
+                 district: district.split(',')[1],
+                 town,
+                 street,
+                 houseNumber,
+                 typeAddress
+             };
+   
+             const cart = [{
+               nameShoes: nameShoes,
+               quantity: count,
+               unitPrice: 1500000,
+               size: selectedTags[0],
+               category: 'custom-shoes',
+             }]
+   
+             const totalPrice = 1500000 * count;
+             const shippingFee = totalPrice * 0.1;
+             const discountPrice = 0;
+       
+             const orderData = {
+               cart,
+               shippingAddress,
+               user,
+               totalPrice,
+               shippingFee,
+               discountPrice,
+             };
+       
+             const config = {
+               headers: {
+                 "Content-Type": "application/json",
+                 Authorization: `${token.current}`,
+               },
+             };
+       
+             orderData.status = "WAITING PAYMENT"
+           //   console.log(orderData)
+       
+             await axios
+               .post(`${server}/order/create-order`, orderData, config)
+               .then((res) => {
+                   localStorage.setItem("latestOrder", JSON.stringify(res.data?.order));
+                   if (typeof window !== "undefined") {
+                     // Client-side-only code
+                     const request = window.indexedDB.open('myDatabase', 1);
+                     request.onsuccess = (event) => {
+                         const db = event.target.result;
+                         // Call deleteObjectStore function with the desired object store name
+                         const objectStoreToDelete = 'ImageStore';
+                         deleteObjectStore(db, objectStoreToDelete);
+                     };
+                   }
+                   router.push("/payment?typeBooking=custom");
+             });
+          }
+        } else {
+          notification.error({message: "Bạn phải đăng nhập để đặt hàng!"})
+          router.push('/login')
+        }
     };
 
   return (

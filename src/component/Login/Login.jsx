@@ -49,7 +49,7 @@ const Login = () => {
       .catch((err) => {
         // notification.error({message: "Login fail!"})
         // console.log(err.response.data)
-        notification.error({message: err.response.data.message})
+        notification.error({message: err.response?.data.message})
       });
   };
 

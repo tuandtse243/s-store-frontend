@@ -346,7 +346,7 @@ const AllOrders = () => {
       key: 'action',
       render: (_, record) => (
         <>
-          <Button type="primary" onClick={() => onDetail(record)}>Chi tiết</Button>
+          <Button type="primary" onClick={() => {}}>Chi tiết</Button>
           {
             record.status === 'PAYMENT FAIL' || record.status === 'WAITING PAYMENT'  ? <Button type="primary" onClick={() => onPayment(record)}>Thanh toán</Button> : null
           }

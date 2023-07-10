@@ -111,13 +111,14 @@ const Header = ({ activeHeading }) => {
           </div>
 
           <div className={`${styles.button}`}>
-            {/* <Link href={`${isSeller ? "/dashboard" : "/shop-create"}`}> */}
+            <Link href={ isAuthenticated ? '/best-selling' : '/register'}>
               <h1 className="text-[#fff] flex items-center">
-                {/* {isSeller ? "Go Dashboard" : "Become Seller"}{" "} */}
-                Become Member
+                {
+                  isAuthenticated ? 'Săn sale' : 'Đăng ký ngay'
+                }
                 <IoIosArrowForward className="ml-1" />
               </h1>
-            {/* </Link> */}
+            </Link>
           </div>
         </div>
       </div>

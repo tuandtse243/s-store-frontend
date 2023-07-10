@@ -9,6 +9,7 @@ import Province from '../../../public/address/tinh_tp.json';
 import District from '../../../public/address/quan_huyen.json';
 import Town from '../../../public/address/xa_phuong.json';
 import { useRouter } from 'next/navigation';
+import { Excel } from 'antd-table-saveas-excel';
 const { Option } = Select;
 
 
@@ -68,22 +69,21 @@ const AllOrders = () => {
     setIsModalOpen(false);
   };
 
-  
-
   const columns = [
     {
       title: 'Mã đơn',
-      dataIndex: '_id',
+      dataIndex: 'id',
       key: 'id',
     },
     {
       title: 'Người nhận',
-      key: 'takePeople',
-      render: (_, { shippingAddress }) => (
-        <>
-          {shippingAddress.name}
-        </>
-      )
+      dataIndex: 'receiverName',
+      key: 'receiverName',
+      // render: (_, { shippingAddress }) => (
+      //   <>
+      //     {shippingAddress.name}
+      //   </>
+      // )
     },
     {
       title: 'Trạng thái',
@@ -115,22 +115,23 @@ const AllOrders = () => {
     },
     {
       title: 'Hình thức',
-      key: 'totalPrice',
-      render: (_, record) => (
-        <>
-          {record?.paymentInfo ? record?.paymentInfo.type : 'Chưa chọn'}
-        </>
-      )
+      dataIndex: 'paymentType',
+      key: 'paymentType',
+      // render: (_, record) => (
+      //   <>
+      //     {record?.paymentInfo ? record?.paymentInfo.type : 'Chưa chọn'}
+      //   </>
+      // )
     },
     {
       title: 'Địa chỉ',
       dataIndex: 'shippingAddress',
       key: 'shippingAddress',
-      render: (_, { shippingAddress }) => (
-        <>
-          {`${shippingAddress.houseNumber}, ${shippingAddress.street}, ${shippingAddress.town}, ${shippingAddress.district}, ${shippingAddress.province}`}
-        </>
-      )
+      // render: (_, { shippingAddress }) => (
+      //   <>
+      //     {`${shippingAddress.houseNumber}, ${shippingAddress.street}, ${shippingAddress.town}, ${shippingAddress.district}, ${shippingAddress.province}`}
+      //   </>
+      // )
     },
     {
       title: '',
@@ -144,7 +145,6 @@ const AllOrders = () => {
       ),
     },
   ];
-
 
   //Select address
   const province = Object.values(Province).map((item) => {
@@ -168,13 +168,71 @@ const AllOrders = () => {
     }
   });
 
+
+
+  const dataSource = orders.map((order) => {
+    return {
+      id: order._id,
+      receiverName: order.shippingAddress.name,
+      status: order.status,
+      totalPrice: order.totalPrice,
+      paymentType: order.paymentInfo?.type || 'Chưa chọn',
+      shippingAddress: `${order.shippingAddress.houseNumber}, ${order.shippingAddress.street}, ${order.shippingAddress.town}, ${order.shippingAddress.district}, ${order.shippingAddress.province}`
+    }
+  })
+
   
+  const columns2 = [
+    {
+      title: 'Mã đơn',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: 'Người nhận',
+      dataIndex: 'receiverName',
+      key: 'receiverName',
+    },
+    {
+      title: 'Trạng thái',
+      dataIndex: 'status',
+      key: 'status',
+    },
+    {
+      title: 'Tổng tiền',
+      dataIndex: 'totalPrice',
+      key: 'totalPrice',
+    },
+    {
+      title: 'Hình thức',
+      dataIndex: 'paymentType',
+      key: 'paymentType',
+    },
+    {
+      title: 'Địa chỉ',
+      dataIndex: 'shippingAddress',
+      key: 'shippingAddress',
+    },
+  ];
+
+  console.log(dataSource)
+  const handleClick = () => {
+    const excel = new Excel();
+    excel
+      .addSheet("Đơn hàng")
+      .addColumns(columns2)
+      .addDataSource(dataSource, {
+        str2Percent: true
+      })
+      .saveAs("Order.xlsx");
+  };
 
   return (
     <>
       {orders.length !== 0 ? (
         <div className="w-[85%] bg-white h-full">
-            <Table columns={columns} dataSource={orders} scroll={{x:1250}}/>
+            <Button onClick={handleClick}>Xuất excel</Button>
+            <Table columns={columns} dataSource={dataSource} scroll={{x:1250}}/>
         </div>
       ) : (
         <Loader />

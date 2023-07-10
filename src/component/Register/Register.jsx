@@ -155,7 +155,7 @@ const Register = () => {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Email <span style={{ fontSize: '12px', color: 'gray' }}>(Chính chủ để Kích hoạt tài khoản)</span>
+                  Email <span style={{ fontSize: '12px', color: 'gray' }}>(Chính chủ để kích hoạt tài khoản)</span>
                 </label>
                 <div className="mt-1">
                   <input
