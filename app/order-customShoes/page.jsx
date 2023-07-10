@@ -171,7 +171,7 @@ const OrderCustomShoes = () => {
                         <img
                           src={`data:image/jpeg;base64,${i}`}
                           alt=""
-                          className="h-[220px] w-[220px] overflow-hidden"
+                          className="h-[220px] w-[220px] overflow-hidden object-contain"
                           onClick={() => setSelect(index)}
                         />
                       </div>

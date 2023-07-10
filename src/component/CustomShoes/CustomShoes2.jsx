@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { ContactShadows, Environment, OrbitControls, useGLTF } from '@react-three/drei'
 import { button, folder, useControls } from 'leva'
-import { Button, Row } from 'antd'
+import { Button, Row, notification } from 'antd'
 import { useRouter } from 'next/navigation'
 import { Color } from 'three'
 import { deleteObjectStore, openDatabase, saveData } from '@/helpers/ConnectIndexedDB/SaveInIndexedDB';
@@ -23,22 +23,33 @@ const Model = ({ images, setImages }) => {
     const gl = useThree((state) => state.gl)
     useControls({
     ['Chụp hình']: 
-         button(() => {
-          const link = document.createElement('a')
-          const image = gl.domElement.toDataURL('image/png').split(',')[1];
-          if (typeof window !== "undefined") {
-            const request = window.indexedDB.open('myDatabase', 1);
-            request.onsuccess = (event) => {
-              const db = event.target.result;
-              saveData(db, image);
-            };
+        button(() => {
+          if(images.length === 5) {
+            notification.success({message: "Bạn đã chụp đủ số hình. Hãy tiến hành đặt hàng!"})
+          } else {
+            const link = document.createElement('a')
+            const image = gl.domElement.toDataURL('image/png').split(',')[1];
+            if (typeof window !== "undefined") {
+              const request = window.indexedDB.open('myDatabase', 1);
+              request.onsuccess = (event) => {
+                const db = event.target.result;
+                saveData(db, image);
+              };
+            }
+  
+            images.push(image)
+            setImages(images)
+            link.click()
+            router.refresh()
           }
-
-          images.push(image)
-          setImages(images)
-          link.click()
-          router.refresh()
-        })
+        }),
+    ['Đặt hàng']: button(() => {
+      if(images.length < 5) {
+        notification.error({message: `Bạn phải chụp thêm ${5-images.length} hình nữa để có thể đặt hàng!`})
+      } else {
+        router.push('/order-customShoes')
+      }
+    })
     })
 
     const meshFilter = []
@@ -115,6 +126,7 @@ const CustomShoes2 = () => {
 
   return (
     <div>
+        <p style={{fontWeight: '700', fontSize: '20px', color: 'red', margin: '10px 0 0 20px', fontStyle: 'italic'}}>***Hãy điều chỉnh thiết kế (dùng chuột trái và phải để điều chỉnh góc giày) và chụp 5 bức hình rõ nhất để có thể đặt hàng***</p>
         {/* <Canvas gl={{ preserveDrawingBuffer: true }} camera={{ position: [1.5, 1, 1.5] }}> */}
         <Canvas gl={{ preserveDrawingBuffer: true }} shadows camera={{ position: [0, 0, 1.66] }}>
             <Suspense fallback={null}>
@@ -131,7 +143,6 @@ const CustomShoes2 = () => {
             images.map((image) => <img src={`data:image/jpeg;base64,${image}`} height={400} width={400} style={{border: '1px solid black', marginLeft: '5px', marginBottom: '5px'}}/>)
           }
         </Row>
-        {images.length === 3 && <Button onClick={() => router.push('/order-customShoes')} style={{margin: '20px 0px'}}>Đặt hàng</Button>}
     </div>
   )
 }
