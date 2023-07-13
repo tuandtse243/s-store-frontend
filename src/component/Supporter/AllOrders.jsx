@@ -72,7 +72,7 @@ const AllOrders = () => {
   const columns = [
     {
       title: 'Mã đơn',
-      // dataIndex: 'id',
+      dataIndex: 'id',
       key: 'id',
     },
     {
