@@ -72,22 +72,22 @@ const AllOrders = () => {
   const columns = [
     {
       title: 'Mã đơn',
-      dataIndex: 'id',
+      // dataIndex: 'id',
       key: 'id',
     },
     {
       title: 'Người nhận',
       dataIndex: 'receiverName',
       key: 'receiverName',
-      // render: (_, { shippingAddress }) => (
-      //   <>
-      //     {shippingAddress.name}
-      //   </>
-      // )
+      render: (_, { shippingAddress }) => (
+        <>
+          {shippingAddress.name}
+        </>
+      )
     },
     {
       title: 'Trạng thái',
-      dataIndex: 'status',
+      // dataIndex: 'status',
       key: 'status',
       render: (_, { status }) => (
         <>
@@ -115,23 +115,23 @@ const AllOrders = () => {
     },
     {
       title: 'Hình thức',
-      dataIndex: 'paymentType',
+      // dataIndex: 'paymentType',
       key: 'paymentType',
-      // render: (_, record) => (
-      //   <>
-      //     {record?.paymentInfo ? record?.paymentInfo.type : 'Chưa chọn'}
-      //   </>
-      // )
+      render: (_, record) => (
+        <>
+          {record?.paymentInfo ? record?.paymentInfo.type : 'Chưa chọn'}
+        </>
+      )
     },
     {
       title: 'Địa chỉ',
-      dataIndex: 'shippingAddress',
+      // dataIndex: 'shippingAddress',
       key: 'shippingAddress',
-      // render: (_, { shippingAddress }) => (
-      //   <>
-      //     {`${shippingAddress.houseNumber}, ${shippingAddress.street}, ${shippingAddress.town}, ${shippingAddress.district}, ${shippingAddress.province}`}
-      //   </>
-      // )
+      render: (_, { shippingAddress }) => (
+        <>
+          {`${shippingAddress.houseNumber}, ${shippingAddress.street}, ${shippingAddress.town}, ${shippingAddress.district}, ${shippingAddress.province}`}
+        </>
+      )
     },
     {
       title: '',
@@ -232,7 +232,7 @@ const AllOrders = () => {
       {orders.length !== 0 ? (
         <div className="w-[85%] bg-white h-full">
             <Button onClick={handleClick}>Xuất excel</Button>
-            <Table columns={columns} dataSource={dataSource} scroll={{x:1250}}/>
+            <Table columns={columns} dataSource={orders} scroll={{x:1250}}/>
         </div>
       ) : (
         <Loader />

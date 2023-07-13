@@ -44,19 +44,18 @@ const Footer = () => {
         {/* <span>Terms · Privacy Policy</span> */}
 
         <div className="flex items-center mt-[15px] justify-center">
-            <AiFillFacebook size={25} className="cursor-pointer" />
-            <AiOutlineTwitter
-              size={25}
-              style={{ marginLeft: "15px", cursor: "pointer" }}
-            />
-            <AiFillInstagram
-              size={25}
-              style={{ marginLeft: "15px", cursor: "pointer" }}
-            />
-            <AiFillYoutube
-              size={25}
-              style={{ marginLeft: "15px", cursor: "pointer" }}
-            />
+            <Link href={'https://www.facebook.com/profile.php?id=100093311251849'}>
+              <AiFillFacebook 
+                size={25} 
+                className="cursor-pointer" 
+              />
+            </Link>
+            <Link href={'https://www.instagram.com/s.store.customshoes/'}>
+              <AiFillInstagram
+                size={25}
+                style={{ marginLeft: "15px", cursor: "pointer" }}
+              />
+            </Link>
           </div>
         
       </div>

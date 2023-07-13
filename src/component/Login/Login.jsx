@@ -36,7 +36,7 @@ const Login = () => {
       )
       .then(async (res) => {
         // router.refresh();
-        notification.success({message: "Login successfully!"});
+        notification.success({message: "Đăng nhập thành công!"});
         setAuth(res.data.user);
         setIsAuthenticated(true);
         localStorage.setItem("token", res.data.token);

@@ -19,13 +19,11 @@ const Welcome = () => {
         <h1
           className={`text-[35px] leading-[1.2] 800px:text-[60px] text-[#ffffff] font-[600] capitalize`}
         >
-          Best Collection for <br /> shoes Decoration
+          Choose S-Store <br /> Choose Your Style
         </h1>
         <p className="pt-5 text-[16px] font-[Poppins] font-[600] text-[#ffffffba]">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Beatae,
-          assumenda? Quisquam itaque <br /> exercitationem labore vel, dolore
-          quidem asperiores, laudantium temporibus soluta optio consequatur{" "}
-          <br /> aliquam deserunt officia. Dolorum saepe nulla provident.
+        Bạn muốn sở hữu một đôi giày thật độc đáo và phản ánh phong cách cá nhân? S-Store chính là nơi bạn cần đến! <br /> Với chức năng custom giày độc đáo, S-Store cho phép bạn tự tay trang trí và thay đổi màu sắc đôi giày theo cách mình thích.{" "}
+          <br />
         </p>
         <Link href="/products" className="inline-block">
             <div className={`${styles.button} mt-5 bg-white`}>

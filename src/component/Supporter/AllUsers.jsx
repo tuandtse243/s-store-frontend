@@ -26,7 +26,7 @@ const AllUsers = () => {
     };
 
     useEffect(() => {
-        axios.get(`${server}/user/get-all-users`, config).then((res) => setUsers(res?.data?.users));
+        axios.get(`${server}/user/get-all-users`, config).then((res) => setUsers(res?.data?.noPasswordUsers));
     }, [])
 
     const editHandler = (userForm) => {
